@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="popular_novel">Novelas Populares</string>
+    <string name="completed">Completadas</string>
+    <string name="see_more">Ver Mas</string>
+</resources>

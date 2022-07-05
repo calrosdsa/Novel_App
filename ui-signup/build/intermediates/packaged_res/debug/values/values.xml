@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_input_empty">Email is empty</string>
+    <string name="error_not_a_valid_email">Invalid email</string>
+    <string name="password_not_match">PassWord dont match</string>
+    <string name="title_activity_main">MainActivity</string>
+    <style name="Theme.Novels" parent="android:Theme.Material.Light.NoActionBar">
+    </style>
+</resources>

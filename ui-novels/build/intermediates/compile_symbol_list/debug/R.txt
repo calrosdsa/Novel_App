@@ -1,0 +1,3 @@
+int string completed 0x0
+int string popular_novel 0x0
+int string see_more 0x0

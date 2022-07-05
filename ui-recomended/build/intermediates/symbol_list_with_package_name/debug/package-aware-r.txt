@@ -1,0 +1,3 @@
+com.example.recommended
+string title_activity_recommended
+style Theme_Novels

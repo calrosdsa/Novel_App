@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Novels</string>
+    <string name="title_activity_splash" translatable="false">SplashActivity</string>
+    <string name="home">Home</string>
+    <string name="discover">Explore</string>
+    <string name="perfil">Profile</string>
+    <string name="bookshlef">Bookshelf</string>
+</resources>

@@ -1,0 +1,12 @@
+<resources>
+    <string name="title_activity_settings" translatable="false">SettingsActivity</string>
+    <string name="setting">Setting</string>
+    <string name="theme">Theme</string>
+    <string name="light">Light Mode</string>
+    <string name="dark">Dark Mode</string>
+    <string name="system">Follow System</string>
+    <string name="user_interface">User Interface</string>
+    <string name="language">Language</string>
+    <string name="spanish">Spanish</string>
+    <string name="english">English</string>
+</resources>

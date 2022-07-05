@@ -1,0 +1,6 @@
+int string add_to 0x0
+int string add_to_library 0x0
+int string download 0x0
+int string read_now 0x0
+int string title_activity_detail 0x0
+int style Theme_Novels 0x0

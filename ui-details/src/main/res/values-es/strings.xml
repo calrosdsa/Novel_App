@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="download">DOWNLOAD</string>
+    <string name="read_now">LEER AHORA</string>
+    <string name="add_to">AÑADIR A</string>
+    <string name="add_to_library">Añadir a Libreria</string>
+</resources>

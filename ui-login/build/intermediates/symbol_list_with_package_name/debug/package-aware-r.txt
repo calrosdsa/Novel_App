@@ -1,0 +1,9 @@
+com.example.login
+drawable ic_launcher_background
+drawable ic_photo
+mipmap ic_launcher
+mipmap ic_launcher_round
+string error_input_empty
+string error_not_a_valid_email
+string title_activity_login
+style Theme_Novels

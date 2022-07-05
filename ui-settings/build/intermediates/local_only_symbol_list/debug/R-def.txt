@@ -1,0 +1,12 @@
+R_DEF: Internal format may change without notice
+local
+string dark
+string english
+string language
+string light
+string setting
+string spanish
+string system
+string theme
+string title_activity_settings
+string user_interface

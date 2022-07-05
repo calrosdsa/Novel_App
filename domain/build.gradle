@@ -1,0 +1,42 @@
+apply plugin: "com.android.library"
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+kapt {
+    correctErrorTypes = true
+    useBuildCache = true
+}
+
+//apply plugin: 'dagger.hilt.android.plugin'
+
+android {
+    compileSdk androidCompileSdkVersion
+
+
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+
+}
+
+dependencies {
+    implementation project(':data')
+    implementation project(':base')
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxlifecycle"
+    implementation "androidx.core:core-ktx:$core_version"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+
+    //implementation 'androidx.paging:paging-compose:1.0.0-alpha14'
+    api "androidx.paging:paging-common-ktx:$paging_version"
+    implementation  "androidx.paging:paging-runtime-ktx:$paging_version"
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.4.Final'
+
+    implementation "com.dropbox.mobile.store:store4:$store_version"
+
+
+}

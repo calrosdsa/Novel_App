@@ -1,0 +1,4 @@
+com.example.screen
+string completed
+string popular_novel
+string see_more

@@ -1,0 +1,7 @@
+com.example.detail
+string add_to
+string add_to_library
+string download
+string read_now
+string title_activity_detail
+style Theme_Novels

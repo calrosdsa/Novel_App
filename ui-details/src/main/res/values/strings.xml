@@ -1,0 +1,7 @@
+<resources>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="download">DOWNLOAD</string>
+    <string name="read_now">READ NOW</string>
+    <string name="add_to">ADD TO</string>
+    <string name="add_to_library">Add to Library</string>
+</resources>

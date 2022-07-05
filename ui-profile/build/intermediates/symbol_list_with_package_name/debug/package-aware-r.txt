@@ -1,0 +1,4 @@
+com.example.profile
+drawable ic_user_placeholder
+string create_account
+string signin

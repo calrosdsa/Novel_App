@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setting">Configuracion</string>
+    <string name="theme">Tema</string>
+    <string name="light">Modo Claro</string>
+    <string name="dark">Modo Oscuro</string>
+    <string name="system">Modo Automatico</string>
+    <string name="user_interface">Interfaz de Usuario</string>
+    <string name="language">Idioma</string>
+    <string name="spanish">Español</string>
+    <string name="english">Ingles</string>
+</resources>

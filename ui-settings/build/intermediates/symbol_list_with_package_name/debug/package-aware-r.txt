@@ -1,0 +1,11 @@
+com.example.settings
+string dark
+string english
+string language
+string light
+string setting
+string spanish
+string system
+string theme
+string title_activity_settings
+string user_interface
