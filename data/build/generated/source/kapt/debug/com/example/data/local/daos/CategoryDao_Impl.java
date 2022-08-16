@@ -37,6 +37,8 @@ public final class CategoryDao_Impl extends CategoryDao {
 
   private final EntityInsertionAdapter<CategoryEntity> __insertionAdapterOfCategoryEntity;
 
+  private final EntityInsertionAdapter<CategoryEntity> __insertionAdapterOfCategoryEntity_1;
+
   private final EntityDeletionOrUpdateAdapter<CategoryEntity> __deletionAdapterOfCategoryEntity;
 
   private final EntityDeletionOrUpdateAdapter<CategoryEntity> __updateAdapterOfCategoryEntity;
@@ -46,6 +48,22 @@ public final class CategoryDao_Impl extends CategoryDao {
   public CategoryDao_Impl(RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfCategoryEntity = new EntityInsertionAdapter<CategoryEntity>(__db) {
+      @Override
+      public String createQuery() {
+        return "INSERT OR REPLACE INTO `category_table` (`id`,`title`) VALUES (?,?)";
+      }
+
+      @Override
+      public void bind(SupportSQLiteStatement stmt, CategoryEntity value) {
+        stmt.bindLong(1, value.getId());
+        if (value.getTitle() == null) {
+          stmt.bindNull(2);
+        } else {
+          stmt.bindString(2, value.getTitle());
+        }
+      }
+    };
+    this.__insertionAdapterOfCategoryEntity_1 = new EntityInsertionAdapter<CategoryEntity>(__db) {
       @Override
       public String createQuery() {
         return "INSERT OR ABORT INTO `category_table` (`id`,`title`) VALUES (?,?)";
@@ -122,7 +140,7 @@ public final class CategoryDao_Impl extends CategoryDao {
       public Unit call() throws Exception {
         __db.beginTransaction();
         try {
-          __insertionAdapterOfCategoryEntity.insert(entity);
+          __insertionAdapterOfCategoryEntity_1.insert(entity);
           __db.setTransactionSuccessful();
           return Unit.INSTANCE;
         } finally {
@@ -140,7 +158,7 @@ public final class CategoryDao_Impl extends CategoryDao {
       public Unit call() throws Exception {
         __db.beginTransaction();
         try {
-          __insertionAdapterOfCategoryEntity.insert(entities);
+          __insertionAdapterOfCategoryEntity_1.insert(entities);
           __db.setTransactionSuccessful();
           return Unit.INSTANCE;
         } finally {

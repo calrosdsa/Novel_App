@@ -60,7 +60,6 @@ class RecommendedViewModel @Inject constructor(
      imgBit = novelUtil.getImageBitmap(context,
          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThroTXm4kovdHyw6NAVJQ3fkGlDfnJaECkmmNTPIuahK7OZ2DmOre_hh4n80RmVj-DjU8&usqp=CAU")
         }
-         Log.d("REFRESHVALUE", auth.refresh.name)
         getAllNovelsIds()
         getAllNovelsFoo()
     }

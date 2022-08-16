@@ -47,19 +47,93 @@ fun NavGraphBuilder.composableRecommended(
     composable(
         route = route,
         enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Up,
-            animationSpec = tween(500))
+            animationSpec = tween(600))
         },
         popEnterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Up,
-            animationSpec = tween(400))
+            animationSpec = tween(500))
         },
         popExitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Down,
-            animationSpec = tween(400))
+            animationSpec = tween(500))
         },
         exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Down,
-            animationSpec = tween(500))
+            animationSpec = tween(600))
         }
     ) {
         content()
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
+fun NavGraphBuilder.composableChapter(
+    route: String,
+    content: @Composable () -> Unit,
+) {
+
+    composable(
+        route = route,
+        enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Down,
+            animationSpec = tween(650))
+        },
+        popEnterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Down,
+            animationSpec = tween(550))
+        },
+//        popExitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Down,
+//            animationSpec = tween(500))
+//        },
+//        exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Down,
+//            animationSpec = tween(600))
+//        }
+    ) {
+        content()
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+fun NavGraphBuilder.composableChapterUp(
+    route: String,
+    content: @Composable () -> Unit,
+) {
+
+    composable(
+        route = route,
+        enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Up,
+            animationSpec = tween(650))
+        },
+        popEnterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Up,
+            animationSpec = tween(550))
+        },
+//        popExitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Down,
+//            animationSpec = tween(500))
+//        },
+//        exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Down,
+//            animationSpec = tween(600))
+//        }
+    ) {
+        content()
+    }
+}
+
+//
+//@OptIn(ExperimentalAnimationApi::class)
+//fun NavGraphBuilder.composableChapter(
+//    route: String,
+//    content: @Composable () -> Unit,
+//) {
+//
+//    composable(
+//        route = route,
+//        enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Up,
+//            animationSpec = tween(500))
+//        },
+//        popEnterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Up,
+//            animationSpec = tween(400))
+//        },
+//        popExitTransition = { fadeOut()
+//        },
+//        exitTransition = { fadeOut()
+//        }
+//    ) {
+//        content()
+//    }
+//}
+//

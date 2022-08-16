@@ -10,7 +10,6 @@ class ObserverCategory @Inject constructor(
     private val categoryDao: CategoryDao
 ) : SubjectInteractor<ObserverCategory.Params, List<CategoryEntity>>() {
 
-
         override fun createObservable(params: Params): Flow<List<CategoryEntity>> {
             return categoryDao.getCategoryList()
         }

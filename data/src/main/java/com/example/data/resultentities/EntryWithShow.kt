@@ -1,5 +1,6 @@
 package com.example.data.resultentities
 
+import com.example.data.local.entities.ChapterEntity
 import com.example.data.local.entities.Entry
 import com.example.data.local.entities.HistoryNovelEntity
 import com.example.data.local.entities.NovelImageEntity
@@ -21,7 +22,6 @@ import java.util.Objects
 //    }
 //}
 
-
 interface EntryWithHistoryNovels<ET : Entry> {
     var entry: ET
     var relations: List<HistoryNovelEntity>
@@ -40,3 +40,5 @@ interface EntryWithHistoryNovels<ET : Entry> {
         return Objects.hash(entry::class.java.name, entry.novelId).toLong()
     }
 }
+
+

@@ -4,7 +4,7 @@ import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.data.Converters
+import com.example.data.util.Converters
 import com.example.data.NovelDatabaseDao
 import com.example.data.local.entities.*
 
@@ -17,6 +17,7 @@ import com.example.data.local.entities.*
         HistoryNovelEntry::class,
         HistoryNovelEntity::class,
         NovelImageEntity::class,
+        ChapterEntity::class
                ],
     version = 2,
     autoMigrations = [

@@ -1,5 +1,6 @@
 R_DEF: Internal format may change without notice
 local
+drawable cover_novel
 string add_to
 string add_to_library
 string download

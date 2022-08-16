@@ -25,11 +25,11 @@ internal fun GenreCategoryList(
     currentCategory:Int?,
 //    isCategorySelected:Boolean
 ){
-    val all = CategoryEntity(
-        id = 0L,
-        title= "All"
-    )
-    val newCategoryList =  categories.plus(all).sortedBy { it.id }
+//    val all = CategoryEntity(
+//        id = 0L,
+//        title= "All"
+//    )
+//    val newCategoryList =  categories.plus(all).sortedBy { it.id }
 
   Row(modifier = Modifier.horizontalScroll(rememberScrollState()).height(125.dp)){
   //        items(
@@ -43,7 +43,7 @@ internal fun GenreCategoryList(
           mainAxisSpacing = 10.dp,
           modifier = Modifier.width(700.dp),
       ) {
-                 newCategoryList.forEach{category->
+                 categories.map{category->
                  BoxSelectOption(
                      setCategory ={ setCategory(it) },
                      id = category.id,

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "fc9860a375e04a10928f74ba1929d49a",
+    "identityHash": "a5fd9394880b263633f52dee6907e4d2",
     "entities": [
       {
         "tableName": "history_search",
@@ -321,7 +321,7 @@
       },
       {
         "tableName": "novel_images",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `novel_id` INTEGER NOT NULL, `image` BLOB NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`novel_id`) REFERENCES `novel_history`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `novel_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `chapterCount` INTEGER NOT NULL, `image` BLOB NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -332,6 +332,18 @@
           {
             "fieldPath": "novelId",
             "columnName": "novel_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chapterCount",
+            "columnName": "chapterCount",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -348,36 +360,64 @@
           ],
           "autoGenerate": false
         },
-        "indices": [
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "chapter_novel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `created_at` TEXT NOT NULL, `novelId` INTEGER NOT NULL, `slug` TEXT NOT NULL, `title` TEXT NOT NULL, `chapter` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
           {
-            "name": "index_novel_images_novel_id",
-            "unique": false,
-            "columnNames": [
-              "novel_id"
-            ],
-            "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_novel_images_novel_id` ON `${TABLE_NAME}` (`novel_id`)"
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created_at",
+            "columnName": "created_at",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "novelId",
+            "columnName": "novelId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "slug",
+            "columnName": "slug",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "chapter",
+            "columnName": "chapter",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
-        "foreignKeys": [
-          {
-            "table": "novel_history",
-            "onDelete": "CASCADE",
-            "onUpdate": "CASCADE",
-            "columns": [
-              "novel_id"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          }
-        ]
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fc9860a375e04a10928f74ba1929d49a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a5fd9394880b263633f52dee6907e4d2')"
     ]
   }
 }

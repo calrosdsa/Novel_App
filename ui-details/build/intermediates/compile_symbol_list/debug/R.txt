@@ -1,3 +1,4 @@
+int drawable cover_novel 0x0
 int string add_to 0x0
 int string add_to_library 0x0
 int string download 0x0

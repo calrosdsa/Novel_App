@@ -2,10 +2,7 @@ package com.example.compose.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
@@ -21,6 +18,7 @@ fun TransparentTextField(
     textFieldValue: MutableState<String>,
     textLabel: String,
     maxChar: Int? = null,
+    error:Boolean = false,
     capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
     keyboardType: KeyboardType,
     keyboardActions: KeyboardActions,
@@ -45,7 +43,10 @@ fun TransparentTextField(
         visualTransformation = visualTransformation,
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color.Transparent,
-            textColor = Color.Black
+            textColor = MaterialTheme.colors.onPrimary,
+            //unfocusedIndicatorColor = MaterialTheme.colors.surface,
+            unfocusedIndicatorColor = if(error) Color.Red else MaterialTheme.colors.primary.copy(alpha = ContentAlpha.high)
         )
+
     )
 }

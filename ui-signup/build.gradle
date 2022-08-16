@@ -69,8 +69,11 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
+    implementation 'com.google.code.gson:gson:2.8.9'
+
 
     implementation("io.coil-kt:coil-compose:$coil_version")
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
 
 
 //    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist"

@@ -9,21 +9,20 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName ="novel_images",
-    indices = [
-        Index(value = ["novel_id"])
-    ],
-    foreignKeys = [
-        ForeignKey(
-            entity = HistoryNovelEntity::class,
-            parentColumns = arrayOf("id"),
-            childColumns = arrayOf("novel_id"),
-            onUpdate = ForeignKey.CASCADE,
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+//    foreignKeys = [
+//        ForeignKey(
+//            entity = HistoryNovelEntity::class,
+//            parentColumns = arrayOf("id"),
+//            childColumns = arrayOf("novel_id"),
+//            onUpdate = ForeignKey.CASCADE,
+//            onDelete = ForeignKey.CASCADE
+//        )
+//    ]
 )
 data class NovelImageEntity(
-    @PrimaryKey override val id: Long = 0,
-    @ColumnInfo(name = "novel_id") val novelId: Long,
+    @PrimaryKey override val id: Long,
+    @ColumnInfo(name = "novel_id") val novelId: Long = 0L,
+    val title:String= "",
+    val chapterCount:Int = 0,
     val image:Bitmap
 ):NovelEntity

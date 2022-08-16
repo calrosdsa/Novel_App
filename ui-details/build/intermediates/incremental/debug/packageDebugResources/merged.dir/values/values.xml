@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_to">ADD TO</string>
+    <string name="add_to_library">Add to Library</string>
+    <string name="download">DOWNLOAD</string>
+    <string name="read_now">READ NOW</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <style name="Theme.Novels" parent="android:Theme.Material.Light.NoActionBar">
+    </style>
+</resources>

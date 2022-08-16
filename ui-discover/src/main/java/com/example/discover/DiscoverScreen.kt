@@ -42,16 +42,16 @@ fun DiscoverScreen(
     val context = LocalContext.current
     val state by rememberStateWithLifecycle(viewModel.state)
     val pagingItems = viewModel.pagingList.collectAsLazyPagingItems()
-    pagingItems.loadState.appendErrorOrNull()?.let { message ->
-        LaunchedEffect(message) {
-            Toast.makeText(context, message.message, Toast.LENGTH_SHORT)
-        }
-    }
-    pagingItems.loadState.refreshErrorOrNull()?.let { message ->
-        LaunchedEffect(message) {
-            Toast.makeText(context, message.message, Toast.LENGTH_SHORT)
-        }
-    }
+//    pagingItems.loadState.appendErrorOrNull()?.let { message ->
+//        LaunchedEffect(message) {
+//            Toast.makeText(context, message.message, Toast.LENGTH_SHORT).show()
+//        }
+//    }
+//    pagingItems.loadState.refreshErrorOrNull()?.let { message ->
+//        LaunchedEffect(message) {
+//            Toast.makeText(context, message.message, Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
 
     state.message?.let {

@@ -1,11 +1,13 @@
 package com.example.screen;
 
 import androidx.compose.foundation.layout.*;
-import androidx.compose.material.ScaffoldState;
+import androidx.compose.material.*;
+import androidx.compose.material.icons.Icons;
 import androidx.compose.runtime.Composable;
 import androidx.compose.ui.Alignment;
 import androidx.compose.ui.Modifier;
 import androidx.navigation.NavController;
+import androidx.paging.LoadState;
 import com.example.data.dto.novels.Completed;
 import com.example.novels.MainDestination;
 import com.example.novels.Screen;

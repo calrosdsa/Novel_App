@@ -1,6 +1,8 @@
 package com.example.novels.navigation
 
 import android.content.Context
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
@@ -13,6 +15,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.*
 import com.example.bookmark.BookMarkScreen
+import com.example.chapters.chapter_detail.ChapterDetailScreen
+import com.example.chapters.chapter_detail.ChapterDownloadDetail
+import com.example.chapters.indice.ChapterIndiceScreen
+import com.example.chapters.indice.DownlaodIndiceChapter
+import com.example.data.util.Constants
 import com.example.detail.NovelDetail
 import com.example.discover.DiscoverScreen
 import com.example.history.HistoryNovelScreen
@@ -27,13 +34,15 @@ import com.example.screen.NovelPage
 import com.example.screen.NovelScreen
 import com.example.search.SearchScreen
 import com.example.search.pagination.AllHistory
+import com.example.signup.RegistrationScreen
 
 @ExperimentalAnimationApi
 fun NavGraphBuilder.homeGraph(
    state: ScaffoldState,
    navController: NavController,
    modifier: Modifier = Modifier,
-   context: Context
+   context: Context,
+   window: Window,
 ) {
     navigation(
        route = MainDestination.HOME_ROUTE,
@@ -47,8 +56,30 @@ fun NavGraphBuilder.homeGraph(
    composableDetail(route = MainDestination.NOVEL_DETAIL + "/{novelSlug}"){
       NovelDetail(navController = navController)
    }
+   composableDetail(route = MainDestination.CHAPTERS_SCREEN + "/{novelSlug}"){
+      ChapterIndiceScreen(navController = navController)
+   }
+   composableChapterUp(route = MainDestination.CHAPTER_SCREEN + "/{novelSlug}"){
+      ChapterDetailScreen(navController = navController, window)
+   }
+   composableChapterUp(route = MainDestination.CHAPTER_DOWNLOAD_DETAIL + "/{novelSlug}"){
+      ChapterDownloadDetail(navController = navController, window)
+   }
+
+   composableChapter(route = MainDestination.CHAPTER_SCREEN_DOWN + "/{novelSlug}"){
+      ChapterDetailScreen(navController = navController,window)
+   }
    composableDetail(route = MainDestination.SEARCH_SCREEN){
       SearchScreen(navController = navController)
+   }
+   composableDetail(route = MainDestination.CHAPTERS_DOWNLOAD + "/{${Constants.PARAM_CHAPTER}}"){
+      DownlaodIndiceChapter(navController = navController)
+   }
+   composableDetail(route = MainDestination.NOVEL_SCREEN){
+      SwipeableScreen()
+   }
+   composableDetail(route = MainDestination.SIGNUP_SCREEN){
+      RegistrationScreen(navController = navController)
    }
    composableDetail(route = MainDestination.LOGIN_SCREEN){
       LoginScreen(navController = navController)
@@ -68,7 +99,6 @@ fun NavGraphBuilder.homeGraph(
    composableRecommended(route = MainDestination.HISTORY_SEARCH){
       AllHistory(navController = navController)
    }
-
 }
 
 
@@ -78,8 +108,6 @@ fun NavGraphBuilder.addHomeGraph(
    scaffoldState: ScaffoldState
   // modifier: Modifier
 ) {
-
-
    composable(route = Screen.Home.route,
       debugLabel = "Home()",
    ) {
@@ -229,7 +257,6 @@ private fun DisposableEffectExample() {
    }
 
 }
-
 
 
 

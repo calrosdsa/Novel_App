@@ -1,34 +1,26 @@
 package com.example.detail.pages
 
 
-import androidx.annotation.StringRes
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.AddCircle
-import androidx.compose.material.icons.outlined.Book
-import androidx.compose.material.icons.outlined.CloudDownload
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -46,6 +38,7 @@ import com.example.compose.ui.rememberNestedScroll
 import com.example.data.dto.novel.Comment
 import com.example.detail.*
 import com.example.detail.R
+import com.example.novels.MainDestination
 import com.example.novels.Screen
 import com.google.accompanist.flowlayout.FlowRow
 import kotlinx.coroutines.launch
@@ -62,7 +55,7 @@ fun NovelDetailPage(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val coroutineScope = rememberCoroutineScope()
-    val bottomBar = 55.dp
+    val bottomBar = 60.dp
     val bottomBarPx = with(LocalDensity.current) { bottomBar.roundToPx().toFloat() }
     var seeMore by remember{ mutableStateOf(false) }
     val state = viewModel.state.value
@@ -90,13 +83,15 @@ fun NovelDetailPage(
         animationSpec = tween(500)
     )
     val nestedScrollConnection = rememberNestedScroll(alphaValue,bottomBarHeight,bottomBarPx,listState)
+    state.novel?.let {
     Scaffold(
         bottomBar = {
-            Row(modifier = Modifier
-                .height(bottomBar)
-                .fillMaxWidth()
+            Row(
+                modifier = Modifier
+                    .height(bottomBar)
+                    .fillMaxWidth()
 //               .zIndex(1f)
-                .offset { IntOffset(x = 0, y = bottomBarHeight.value.roundToInt()) },
+                    .offset { IntOffset(x = 0, y = bottomBarHeight.value.roundToInt()) },
                 horizontalArrangement = Arrangement.SpaceAround,
             ) {
                 listOfBottomItems.forEachIndexed { index, item ->
@@ -108,29 +103,60 @@ fun NovelDetailPage(
                             .height(bottomBar)
                             .width(screenWidth / 3)
                             .background(if (index == 1) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant)
+                            .clickable {
+                                when (index) {
+                                    2 -> viewModel.addToLibrary(it.id)
+                                }
+                            }
                     ) {
-                        Icon(
-                            imageVector = item.iconImageVector,
-                            contentDescription = item.contentDescriptionResId.toString()
-                        )
+                        when (index) {
+                            0 -> {
+                                Icon(
+                                    imageVector = item.iconImageVector,
+                                    contentDescription = item.contentDescriptionResId.toString()
+                                )
+                            }
+                            1 -> {
+                                Icon(
+                                    imageVector = item.iconImageVector,
+                                    contentDescription = item.contentDescriptionResId.toString()
+                                )
+                            }
+                            2 -> {
+                                Crossfade(targetState = viewModel.ids.contains(it.id)) { bool ->
+                                    if (bool) {
+                                        Icon(
+                                            imageVector = Icons.Default.Check,
+                                            contentDescription = item.contentDescriptionResId.toString()
+                                        )
+                                    } else {
+                                        Icon(
+                                            imageVector = item.iconImageVector,
+                                            contentDescription = item.contentDescriptionResId.toString()
+                                        )
+                                    }
+                                }
+
+                            }
+                        }
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(
-                            text = stringResource(id = item.labelResId),
+                            text = if (index == 2 && viewModel.ids.contains(it.id)) "ADDED" else stringResource(
+                                id = item.labelResId
+                            ),
                             style = MaterialTheme.typography.caption
                         )
                     }
                 }
-
             }
         }
     ) {padding->
 
-    state.novel?.let {
     //   Column() {
 
            LazyColumn(
                state = listState,
-               contentPadding= PaddingValues(start = 7.dp,end = 7.dp,bottom = padding.calculateBottomPadding()),
+               contentPadding= PaddingValues(bottom = padding.calculateBottomPadding()),
                modifier = Modifier
                    .fillMaxSize()
                    .nestedScroll(nestedScrollConnection)
@@ -160,7 +186,9 @@ fun NovelDetailPage(
                                Icon(
                                    imageVector = Icons.Default.ArrowBack,
                                    contentDescription = "ArrowLeftNovelDetail",
-                                   modifier = Modifier.size(29.dp).clickable { navController.popBackStack() }
+                                   modifier = Modifier
+                                       .size(29.dp)
+                                       .clickable { navController.popBackStack() }
                                )
                                Text(text = "Info",
                                    style = MaterialTheme.typography.caption.copy(fontSize = 14.sp),
@@ -201,7 +229,9 @@ fun NovelDetailPage(
                                Icon(
                                    imageVector = Icons.Default.ArrowBack,
                                    contentDescription = "ArrowLeftNovelDetail",
-                                   modifier = Modifier.size(29.dp).clickable { navController.popBackStack() }
+                                   modifier = Modifier
+                                       .size(29.dp)
+                                       .clickable { navController.popBackStack() }
                                )
                                Icon(
                                    imageVector = Icons.Default.Share,
@@ -227,7 +257,7 @@ fun NovelDetailPage(
                    ) {
                        Row(
                            modifier = Modifier
-                               .fillMaxWidth(0.96f)
+                               .fillMaxWidth()
                                .fillMaxHeight(),
                            horizontalArrangement = Arrangement.Center,
                            verticalAlignment = Alignment.CenterVertically
@@ -264,7 +294,10 @@ fun NovelDetailPage(
                                ) {
                                    it.category.forEach { category ->
                                        TagItem(tag = category.title,
-                                           navToCategory={navController.navigate(Screen.Explore.route + "?category=${category.id}")}
+                                           navToCategory={navController.navigate(Screen.Explore.route + "?category=${category.id}")},
+                                           modifier = Modifier
+                                               .clip(shape = com.example.detail.roundedItem)
+                                               .background(color = MaterialTheme.colors.primaryVariant),
                                        )
                                    }
                                }
@@ -274,10 +307,20 @@ fun NovelDetailPage(
                }
 
                item {
+                   Spacer(modifier = Modifier.height(30.dp))
+                   Button(onClick = {
+                       navController.navigate(MainDestination.CHAPTERS_SCREEN + "/${it.slug}")
+//                       navController.navigate(MainDestination.HISTORY_NOVEL)
+                   }) {
+
+                   }
+               }
+
+               item {
                    Box(
                        modifier = Modifier
                            .fillMaxWidth()
-                           .padding(15.dp)
+                           .padding(horizontal = 15.dp)
                            .clip(shape = RoundedCornerShape(30.dp))
                            .background(color = MaterialTheme.colors.secondaryVariant),
                        contentAlignment = Alignment.Center
@@ -290,12 +333,17 @@ fun NovelDetailPage(
                    }
                    Spacer(modifier = Modifier.height(5.dp))
                }
-               item {
 
+               item {
+                   Spacer(modifier = Modifier.height(20.dp))
+               }
+
+               item {
                    Text(
                        text = it.description,
                        style = MaterialTheme.typography.body2,
-                       color = MaterialTheme.colors.secondary
+                       color = MaterialTheme.colors.secondary,
+                       modifier =Modifier.padding(horizontal = 10.dp)
                    )
                    Spacer(modifier = Modifier.height(15.dp))
                }
@@ -304,19 +352,22 @@ fun NovelDetailPage(
                    Text(
                        text = "Synopsis", style = MaterialTheme.typography.h6.copy(
                            fontSize = 16.sp,
-                       ), color = MaterialTheme.colors.secondary
+                       ), color = MaterialTheme.colors.secondary,
+                       modifier =Modifier.padding(horizontal = 10.dp)
                    )
                    Spacer(modifier = Modifier.height(15.dp))
                }
                item {
                    Box(
                        modifier = Modifier
+                           .padding(horizontal = 10.dp)
                            .clickable { seeMore = !seeMore }
                            .animateContentSize()
                    ) {
                        Text(
                            text = it.sumary, style = MaterialTheme.typography.body2,
-                           maxLines = if (seeMore) Int.MAX_VALUE else 3
+                           maxLines = if (seeMore) Int.MAX_VALUE else 3,
+                           modifier =Modifier.padding(horizontal = 10.dp)
                        )
                    }
                }
@@ -333,7 +384,7 @@ fun NovelDetailPage(
                    Row(
                        modifier = Modifier
                            .fillMaxWidth()
-                           .padding(vertical = 13.dp),
+                           .padding(13.dp),
                        horizontalArrangement = Arrangement.SpaceBetween,
                        verticalAlignment = Alignment.CenterVertically
                    ) {
@@ -362,7 +413,9 @@ fun NovelDetailPage(
                item {
 
                    Row(
-                       modifier = Modifier.fillMaxWidth(),
+                       modifier = Modifier
+                           .fillMaxWidth()
+                           .padding(horizontal = 10.dp),
                        horizontalArrangement = Arrangement.SpaceBetween,
                        verticalAlignment = Alignment.CenterVertically
                    ) {
@@ -382,14 +435,14 @@ fun NovelDetailPage(
 
                    FlowRow(
                        mainAxisSpacing = 5.dp,
-                       crossAxisSpacing = 5.dp
+                       crossAxisSpacing = 5.dp,
                    ) {
                        it.tags.forEach { tag ->
                            TagItem(
                                tag = "#${tag.title}", color = Color.Red,
                                modifier = Modifier
                                    .clip(shape = com.example.detail.roundedItem)
-                                   .background(color = Color.LightGray),
+                                   .background(color = MaterialTheme.colors.primaryVariant),
                                navToCategory = {}
                            )
                        }
@@ -416,36 +469,6 @@ fun NovelDetailPage(
 
 
 
-private sealed class BottomItem(
-    @StringRes val labelResId: Int,
-    @StringRes val contentDescriptionResId: Int,
-) {
-    class ImageVectorIcon(
-        @StringRes labelResId: Int,
-        @StringRes contentDescriptionResId: Int,
-        val iconImageVector: ImageVector,
-    ) : BottomItem( labelResId, contentDescriptionResId)
-}
-
-private val listOfBottomItems = listOf(
-    BottomItem.ImageVectorIcon(
-        labelResId = R.string.download,
-        contentDescriptionResId = R.string.download,
-        iconImageVector = Icons.Outlined.CloudDownload,
-    ),
-    BottomItem.ImageVectorIcon(
-        labelResId = R.string.read_now,
-        contentDescriptionResId = R.string.read_now,
-        iconImageVector = Icons.Outlined.Book
-    ),
-    BottomItem.ImageVectorIcon(
-        labelResId = R.string.add_to,
-        contentDescriptionResId = R.string.add_to,
-        iconImageVector = Icons.Outlined.AddCircle
-    )
-
-)
-
 
 
 
@@ -456,11 +479,6 @@ fun TagItem(tag:String,modifier: Modifier = Modifier,
             navToCategory:()->Unit
 ){
     Box(modifier = modifier
-        .border(
-            width = 1.dp,
-            color = MaterialTheme.colors.onPrimary,
-            shape = RoundedCornerShape(30.dp)
-        )
         .padding(5.dp)
         .clickable {
             navToCategory()
@@ -477,7 +495,13 @@ fun TagItem(tag:String,modifier: Modifier = Modifier,
 
 @Composable
 fun CommentItem(comment: Comment) {
-    Box() {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 10.dp, vertical = 4.dp)
+        .clip(MaterialTheme.shapes.small)
+        .background(MaterialTheme.colors.primaryVariant.copy(alpha = ContentAlpha.medium))
+        .padding(10.dp)
+    ) {
         Row() {
             Image(
                 painter = rememberAsyncImagePainter(
@@ -521,43 +545,5 @@ fun CommentItem(comment: Comment) {
         Spacer(modifier = Modifier.height(18.dp))
 
     }
-}
-
-
-@Composable
-fun rememberScrollConection(toolbarOffsetHeightPx:MutableState<Float>, toolbarHeightPx: Float) = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                // try to consume before LazyColumn to collapse toolbar if needed, hence pre-scroll
-                val delta = available.y
-                val newOffset = toolbarOffsetHeightPx.value + delta
-                toolbarOffsetHeightPx.value = newOffset.coerceIn(-toolbarHeightPx, 0f)
-                // here's the catch: let's pretend we consumed 0 in any case, since we want
-                // LazyColumn to scroll anyway for good UX
-                // We're basically watching scroll without taking it
-                return Offset.Zero
-            }
-        }
-}
-
-
-
-
-@Composable
-private fun LazyListState.isScrollingUp(): Boolean {
-    var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
-    var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
-    return remember(this) {
-        derivedStateOf {
-            if (previousIndex != firstVisibleItemIndex) {
-                previousIndex > firstVisibleItemIndex
-            } else {
-                previousScrollOffset >= firstVisibleItemScrollOffset
-            }.also {
-                previousIndex = firstVisibleItemIndex
-                previousScrollOffset = firstVisibleItemScrollOffset
-            }
-        }
-    }.value
 }
 

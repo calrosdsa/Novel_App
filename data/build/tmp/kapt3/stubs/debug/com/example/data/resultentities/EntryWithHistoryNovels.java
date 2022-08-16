@@ -1,5 +1,6 @@
 package com.example.data.resultentities;
 
+import com.example.data.local.entities.ChapterEntity;
 import com.example.data.local.entities.Entry;
 import com.example.data.local.entities.HistoryNovelEntity;
 import com.example.data.local.entities.NovelImageEntity;

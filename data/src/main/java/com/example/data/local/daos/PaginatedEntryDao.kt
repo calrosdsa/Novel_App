@@ -25,7 +25,6 @@ import com.example.data.resultentities.EntryWithHistoryNovels
 //        insertAll(entities)
 //    }
 //}
-
 abstract class PaginatedNovelsEntryDao<EC : PaginatedEntry, LI : EntryWithHistoryNovels<EC>> : EntryDao<EC, LI>() {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract override suspend fun insert(entity: EC):Long

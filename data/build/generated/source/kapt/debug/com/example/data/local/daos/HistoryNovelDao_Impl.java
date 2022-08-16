@@ -17,11 +17,11 @@ import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.room.util.StringUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
-import com.example.data.Converters;
 import com.example.data.local.entities.HistoryNovelEntity;
 import com.example.data.local.entities.HistoryNovelEntry;
 import com.example.data.local.entities.NovelImageEntity;
 import com.example.data.resultentities.HistoryEntryWithNovels;
+import com.example.data.util.Converters;
 import java.lang.Class;
 import java.lang.Exception;
 import java.lang.Integer;
@@ -646,7 +646,7 @@ public final class HistoryNovelDao_Impl extends HistoryNovelDao {
       return;
     }
     StringBuilder _stringBuilder = StringUtil.newStringBuilder();
-    _stringBuilder.append("SELECT `id`,`novel_id`,`image` FROM `novel_images` WHERE `novel_id` IN (");
+    _stringBuilder.append("SELECT `id`,`novel_id`,`title`,`chapterCount`,`image` FROM `novel_images` WHERE `novel_id` IN (");
     final int _inputSize = _map.size();
     StringUtil.appendPlaceholders(_stringBuilder, _inputSize);
     _stringBuilder.append(")");
@@ -667,7 +667,9 @@ public final class HistoryNovelDao_Impl extends HistoryNovelDao {
       }
       final int _cursorIndexOfId = 0;
       final int _cursorIndexOfNovelId = 1;
-      final int _cursorIndexOfImage = 2;
+      final int _cursorIndexOfTitle = 2;
+      final int _cursorIndexOfChapterCount = 3;
+      final int _cursorIndexOfImage = 4;
       while(_cursor.moveToNext()) {
         final long _tmpKey = _cursor.getLong(_itemKeyIndex);
         ArrayList<NovelImageEntity> _tmpRelation = _map.get(_tmpKey);
@@ -677,6 +679,14 @@ public final class HistoryNovelDao_Impl extends HistoryNovelDao {
           _tmpId = _cursor.getLong(_cursorIndexOfId);
           final long _tmpNovelId;
           _tmpNovelId = _cursor.getLong(_cursorIndexOfNovelId);
+          final String _tmpTitle;
+          if (_cursor.isNull(_cursorIndexOfTitle)) {
+            _tmpTitle = null;
+          } else {
+            _tmpTitle = _cursor.getString(_cursorIndexOfTitle);
+          }
+          final int _tmpChapterCount;
+          _tmpChapterCount = _cursor.getInt(_cursorIndexOfChapterCount);
           final Bitmap _tmpImage;
           final byte[] _tmp;
           if (_cursor.isNull(_cursorIndexOfImage)) {
@@ -685,7 +695,7 @@ public final class HistoryNovelDao_Impl extends HistoryNovelDao {
             _tmp = _cursor.getBlob(_cursorIndexOfImage);
           }
           _tmpImage = __converters.toBitmap(_tmp);
-          _item_1 = new NovelImageEntity(_tmpId,_tmpNovelId,_tmpImage);
+          _item_1 = new NovelImageEntity(_tmpId,_tmpNovelId,_tmpTitle,_tmpChapterCount,_tmpImage);
           _tmpRelation.add(_item_1);
         }
       }

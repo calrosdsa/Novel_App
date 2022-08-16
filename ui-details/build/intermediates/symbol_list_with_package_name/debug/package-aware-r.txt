@@ -1,4 +1,5 @@
 com.example.detail
+drawable cover_novel
 string add_to
 string add_to_library
 string download

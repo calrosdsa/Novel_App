@@ -11,4 +11,6 @@ interface NovelDatabaseDao {
     fun novelHistoryDao():NovelHistoryDao
     fun novelImageDao():NovelImageDao
 
+    fun chapterNovelDao():ChapterDao
+
 }

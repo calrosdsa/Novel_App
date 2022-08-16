@@ -4,6 +4,7 @@ import androidx.lifecycle.MediatorLiveData
 import com.example.api.UiMessage
 import com.example.domain.util.NovelOrder
 import com.example.data.local.entities.FollowingEntity
+import com.example.data.resultentities.ChapterAndNovelImage
 
 
 data class FollowingState(
@@ -12,16 +13,16 @@ data class FollowingState(
     val option:Int = 0,
     val ordering: NovelOrder? = NovelOrder.Updated,
     val filterType: FilterOption? =FilterOption.Filter,
-  //  val orderType:OrderType? = OrderType.Descending,
     val currentItem:FollowingEntity? = null,
     val message: UiMessage? = null,
-
-    //FilterOption.Filter(value = listOf("Updated","Favorites","Completed"), title = "Filter By")
-
 )
 
+data class DownLoadChapterState(
+    val chapters:List<ChapterAndNovelImage> = emptyList(),
+    val message: UiMessage? = null,
+    val loading:Boolean = false,
 
-
+)
 
 sealed class FilterOption(
     val values:List<String>,

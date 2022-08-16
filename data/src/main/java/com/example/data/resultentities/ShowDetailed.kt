@@ -14,12 +14,10 @@ class HistoryDetailed {
     @Relation(parentColumn = "id", entityColumn = "novel_id")
     lateinit var images: List<NovelImageEntity>
 
-    @delegate:Ignore
-    val backdrop: NovelImageEntity? by lazy(LazyThreadSafetyMode.NONE) {
-        images[0]
-    }
-
-
+//    @delegate:Ignore
+//    val backdrop: NovelImageEntity? by lazy(LazyThreadSafetyMode.NONE) {
+//        images[0]
+//    }
 
     override fun equals(other: Any?): Boolean = when {
         other === this -> true

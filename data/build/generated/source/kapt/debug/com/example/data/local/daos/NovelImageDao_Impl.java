@@ -13,8 +13,8 @@ import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
-import com.example.data.Converters;
 import com.example.data.local.entities.NovelImageEntity;
+import com.example.data.util.Converters;
 import java.lang.Class;
 import java.lang.Exception;
 import java.lang.Integer;
@@ -41,6 +41,8 @@ public final class NovelImageDao_Impl extends NovelImageDao {
 
   private final Converters __converters = new Converters();
 
+  private final EntityInsertionAdapter<NovelImageEntity> __insertionAdapterOfNovelImageEntity_1;
+
   private final EntityDeletionOrUpdateAdapter<NovelImageEntity> __deletionAdapterOfNovelImageEntity;
 
   private final EntityDeletionOrUpdateAdapter<NovelImageEntity> __updateAdapterOfNovelImageEntity;
@@ -54,18 +56,48 @@ public final class NovelImageDao_Impl extends NovelImageDao {
     this.__insertionAdapterOfNovelImageEntity = new EntityInsertionAdapter<NovelImageEntity>(__db) {
       @Override
       public String createQuery() {
-        return "INSERT OR ABORT INTO `novel_images` (`id`,`novel_id`,`image`) VALUES (?,?,?)";
+        return "INSERT OR REPLACE INTO `novel_images` (`id`,`novel_id`,`title`,`chapterCount`,`image`) VALUES (?,?,?,?,?)";
       }
 
       @Override
       public void bind(SupportSQLiteStatement stmt, NovelImageEntity value) {
         stmt.bindLong(1, value.getId());
         stmt.bindLong(2, value.getNovelId());
-        final byte[] _tmp = __converters.fromBitmap(value.getImage());
-        if (_tmp == null) {
+        if (value.getTitle() == null) {
           stmt.bindNull(3);
         } else {
-          stmt.bindBlob(3, _tmp);
+          stmt.bindString(3, value.getTitle());
+        }
+        stmt.bindLong(4, value.getChapterCount());
+        final byte[] _tmp = __converters.fromBitmap(value.getImage());
+        if (_tmp == null) {
+          stmt.bindNull(5);
+        } else {
+          stmt.bindBlob(5, _tmp);
+        }
+      }
+    };
+    this.__insertionAdapterOfNovelImageEntity_1 = new EntityInsertionAdapter<NovelImageEntity>(__db) {
+      @Override
+      public String createQuery() {
+        return "INSERT OR ABORT INTO `novel_images` (`id`,`novel_id`,`title`,`chapterCount`,`image`) VALUES (?,?,?,?,?)";
+      }
+
+      @Override
+      public void bind(SupportSQLiteStatement stmt, NovelImageEntity value) {
+        stmt.bindLong(1, value.getId());
+        stmt.bindLong(2, value.getNovelId());
+        if (value.getTitle() == null) {
+          stmt.bindNull(3);
+        } else {
+          stmt.bindString(3, value.getTitle());
+        }
+        stmt.bindLong(4, value.getChapterCount());
+        final byte[] _tmp = __converters.fromBitmap(value.getImage());
+        if (_tmp == null) {
+          stmt.bindNull(5);
+        } else {
+          stmt.bindBlob(5, _tmp);
         }
       }
     };
@@ -83,20 +115,26 @@ public final class NovelImageDao_Impl extends NovelImageDao {
     this.__updateAdapterOfNovelImageEntity = new EntityDeletionOrUpdateAdapter<NovelImageEntity>(__db) {
       @Override
       public String createQuery() {
-        return "UPDATE OR ABORT `novel_images` SET `id` = ?,`novel_id` = ?,`image` = ? WHERE `id` = ?";
+        return "UPDATE OR ABORT `novel_images` SET `id` = ?,`novel_id` = ?,`title` = ?,`chapterCount` = ?,`image` = ? WHERE `id` = ?";
       }
 
       @Override
       public void bind(SupportSQLiteStatement stmt, NovelImageEntity value) {
         stmt.bindLong(1, value.getId());
         stmt.bindLong(2, value.getNovelId());
-        final byte[] _tmp = __converters.fromBitmap(value.getImage());
-        if (_tmp == null) {
+        if (value.getTitle() == null) {
           stmt.bindNull(3);
         } else {
-          stmt.bindBlob(3, _tmp);
+          stmt.bindString(3, value.getTitle());
         }
-        stmt.bindLong(4, value.getId());
+        stmt.bindLong(4, value.getChapterCount());
+        final byte[] _tmp = __converters.fromBitmap(value.getImage());
+        if (_tmp == null) {
+          stmt.bindNull(5);
+        } else {
+          stmt.bindBlob(5, _tmp);
+        }
+        stmt.bindLong(6, value.getId());
       }
     };
     this.__preparedStmtOfDeleteForShowId = new SharedSQLiteStatement(__db) {
@@ -139,7 +177,7 @@ public final class NovelImageDao_Impl extends NovelImageDao {
       public Unit call() throws Exception {
         __db.beginTransaction();
         try {
-          __insertionAdapterOfNovelImageEntity.insert(entity);
+          __insertionAdapterOfNovelImageEntity_1.insert(entity);
           __db.setTransactionSuccessful();
           return Unit.INSTANCE;
         } finally {
@@ -157,7 +195,7 @@ public final class NovelImageDao_Impl extends NovelImageDao {
       public Unit call() throws Exception {
         __db.beginTransaction();
         try {
-          __insertionAdapterOfNovelImageEntity.insert(entities);
+          __insertionAdapterOfNovelImageEntity_1.insert(entities);
           __db.setTransactionSuccessful();
           return Unit.INSTANCE;
         } finally {
@@ -301,6 +339,8 @@ public final class NovelImageDao_Impl extends NovelImageDao {
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
           final int _cursorIndexOfNovelId = CursorUtil.getColumnIndexOrThrow(_cursor, "novel_id");
+          final int _cursorIndexOfTitle = CursorUtil.getColumnIndexOrThrow(_cursor, "title");
+          final int _cursorIndexOfChapterCount = CursorUtil.getColumnIndexOrThrow(_cursor, "chapterCount");
           final int _cursorIndexOfImage = CursorUtil.getColumnIndexOrThrow(_cursor, "image");
           final NovelImageEntity _result;
           if(_cursor.moveToFirst()) {
@@ -308,6 +348,14 @@ public final class NovelImageDao_Impl extends NovelImageDao {
             _tmpId = _cursor.getLong(_cursorIndexOfId);
             final long _tmpNovelId;
             _tmpNovelId = _cursor.getLong(_cursorIndexOfNovelId);
+            final String _tmpTitle;
+            if (_cursor.isNull(_cursorIndexOfTitle)) {
+              _tmpTitle = null;
+            } else {
+              _tmpTitle = _cursor.getString(_cursorIndexOfTitle);
+            }
+            final int _tmpChapterCount;
+            _tmpChapterCount = _cursor.getInt(_cursorIndexOfChapterCount);
             final Bitmap _tmpImage;
             final byte[] _tmp;
             if (_cursor.isNull(_cursorIndexOfImage)) {
@@ -316,7 +364,7 @@ public final class NovelImageDao_Impl extends NovelImageDao {
               _tmp = _cursor.getBlob(_cursorIndexOfImage);
             }
             _tmpImage = __converters.toBitmap(_tmp);
-            _result = new NovelImageEntity(_tmpId,_tmpNovelId,_tmpImage);
+            _result = new NovelImageEntity(_tmpId,_tmpNovelId,_tmpTitle,_tmpChapterCount,_tmpImage);
           } else {
             _result = null;
           }

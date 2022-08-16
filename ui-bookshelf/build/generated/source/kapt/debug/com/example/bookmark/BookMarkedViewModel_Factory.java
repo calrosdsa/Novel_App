@@ -1,6 +1,5 @@
 package com.example.bookmark;
 
-import com.example.data.repository.NovelRepository;
 import com.example.domain.UserAuth;
 import com.example.domain.interactors.AddOrRemoveNovelFromBookMark;
 import com.example.domain.interactors.UpdateFollowingNovels;
@@ -25,8 +24,6 @@ import javax.inject.Provider;
     "rawtypes"
 })
 public final class BookMarkedViewModel_Factory implements Factory<BookMarkedViewModel> {
-  private final Provider<NovelRepository> novelRepositoryProvider;
-
   private final Provider<ObserverFollowings> observerFollowingsProvider;
 
   private final Provider<UpdateFollowingNovels> updateFollowingNovelsProvider;
@@ -37,13 +34,11 @@ public final class BookMarkedViewModel_Factory implements Factory<BookMarkedView
 
   private final Provider<UserAuth> userAuthProvider;
 
-  public BookMarkedViewModel_Factory(Provider<NovelRepository> novelRepositoryProvider,
-      Provider<ObserverFollowings> observerFollowingsProvider,
+  public BookMarkedViewModel_Factory(Provider<ObserverFollowings> observerFollowingsProvider,
       Provider<UpdateFollowingNovels> updateFollowingNovelsProvider,
       Provider<UpdatedOptionsBookMark> updatedOptionsBookMarkProvider,
       Provider<AddOrRemoveNovelFromBookMark> addOrRemoveNovelFromBookMarkProvider,
       Provider<UserAuth> userAuthProvider) {
-    this.novelRepositoryProvider = novelRepositoryProvider;
     this.observerFollowingsProvider = observerFollowingsProvider;
     this.updateFollowingNovelsProvider = updateFollowingNovelsProvider;
     this.updatedOptionsBookMarkProvider = updatedOptionsBookMarkProvider;
@@ -53,23 +48,21 @@ public final class BookMarkedViewModel_Factory implements Factory<BookMarkedView
 
   @Override
   public BookMarkedViewModel get() {
-    return newInstance(novelRepositoryProvider.get(), observerFollowingsProvider.get(), updateFollowingNovelsProvider.get(), updatedOptionsBookMarkProvider.get(), addOrRemoveNovelFromBookMarkProvider.get(), userAuthProvider.get());
+    return newInstance(observerFollowingsProvider.get(), updateFollowingNovelsProvider.get(), updatedOptionsBookMarkProvider.get(), addOrRemoveNovelFromBookMarkProvider.get(), userAuthProvider.get());
   }
 
   public static BookMarkedViewModel_Factory create(
-      Provider<NovelRepository> novelRepositoryProvider,
       Provider<ObserverFollowings> observerFollowingsProvider,
       Provider<UpdateFollowingNovels> updateFollowingNovelsProvider,
       Provider<UpdatedOptionsBookMark> updatedOptionsBookMarkProvider,
       Provider<AddOrRemoveNovelFromBookMark> addOrRemoveNovelFromBookMarkProvider,
       Provider<UserAuth> userAuthProvider) {
-    return new BookMarkedViewModel_Factory(novelRepositoryProvider, observerFollowingsProvider, updateFollowingNovelsProvider, updatedOptionsBookMarkProvider, addOrRemoveNovelFromBookMarkProvider, userAuthProvider);
+    return new BookMarkedViewModel_Factory(observerFollowingsProvider, updateFollowingNovelsProvider, updatedOptionsBookMarkProvider, addOrRemoveNovelFromBookMarkProvider, userAuthProvider);
   }
 
-  public static BookMarkedViewModel newInstance(NovelRepository novelRepository,
-      ObserverFollowings observerFollowings, UpdateFollowingNovels updateFollowingNovels,
-      UpdatedOptionsBookMark updatedOptionsBookMark,
+  public static BookMarkedViewModel newInstance(ObserverFollowings observerFollowings,
+      UpdateFollowingNovels updateFollowingNovels, UpdatedOptionsBookMark updatedOptionsBookMark,
       AddOrRemoveNovelFromBookMark addOrRemoveNovelFromBookMark, UserAuth userAuth) {
-    return new BookMarkedViewModel(novelRepository, observerFollowings, updateFollowingNovels, updatedOptionsBookMark, addOrRemoveNovelFromBookMark, userAuth);
+    return new BookMarkedViewModel(observerFollowings, updateFollowingNovels, updatedOptionsBookMark, addOrRemoveNovelFromBookMark, userAuth);
   }
 }

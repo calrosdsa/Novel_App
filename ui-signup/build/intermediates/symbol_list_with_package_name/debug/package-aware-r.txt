@@ -5,6 +5,7 @@ drawable ic_photo3
 drawable ic_photo4
 string error_input_empty
 string error_not_a_valid_email
+string password_is_too_short
 string password_not_match
 string title_activity_main
 style Theme_Novels

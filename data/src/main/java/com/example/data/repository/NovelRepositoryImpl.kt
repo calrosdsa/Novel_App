@@ -13,10 +13,13 @@ import com.example.data.dto.searchNovel.ResultSearch
 import com.example.data.dto.user.LoginRequest
 import com.example.data.dto.user.LoginResponse
 import com.example.data.dto.user.SignUpRequest
+import com.example.data.dto.user.SignUpResponse
 import com.example.data.remote.ApiService
 import com.example.data.remote.NovelOption
 import com.example.domain.UserAuth
 import com.example.domain.UserData
+import retrofit2.Call
+import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -45,7 +48,7 @@ class NovelRepositoryImpl @Inject constructor(
         return api.getReviewsNovel(novelSlug)
     }
 
-    override suspend fun loginRequest(email: String, password: String): LoginResponse {
+    override suspend fun loginRequest(email: String, password: String): Response<LoginResponse> {
 
         val response = api.loginRequest(
             loginRequest = LoginRequest(
@@ -53,8 +56,9 @@ class NovelRepositoryImpl @Inject constructor(
                 password = password
             )
         )
-
-       auth.tokenValue = UserData(token = response.key)
+      response.body()?.key?.let {
+      auth.tokenValue = UserData(token = it)
+      }
             //val dataUser= response.data
       return response
 
@@ -65,7 +69,12 @@ class NovelRepositoryImpl @Inject constructor(
         email: String,
         password1: String,
         password2: String
-    ): LoginResponse {
+    ): Response<SignUpResponse> {
+        //      val body = response.body()
+//        if(response.isSuccessful){
+//        auth.tokenValue = UserData(token = body?.key!!)
+//            //            .apply()
+//        }
         val response = api.signUpRequest(
             signUpRequest = SignUpRequest(
                 username = username,
@@ -74,8 +83,9 @@ class NovelRepositoryImpl @Inject constructor(
                 password2 = password2
             )
         )
-        auth.tokenValue = UserData(token = response.key)
-            //            .apply()
+        response.body()?.key?.let {
+            auth.tokenValue = UserData(token = it)
+        }
         return response
     }
 

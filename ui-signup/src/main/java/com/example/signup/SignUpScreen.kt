@@ -1,5 +1,6 @@
 package com.example.signup
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -42,6 +44,7 @@ fun RegistrationScreen(
  //   onLogin:() -> Unit
  //   onDismissDialog: () -> Unit
 ) {
+    val context = LocalContext.current
     val state = viewModel.state.value
 
     val username = remember { mutableStateOf("") }
@@ -88,8 +91,8 @@ fun RegistrationScreen(
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+           //     horizontalAlignment = Alignment.CenterHorizontally,
+          //      verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 TransparentTextField(
                     textFieldValue = username,
@@ -100,9 +103,19 @@ fun RegistrationScreen(
                             focusManager.moveFocus(FocusDirection.Down)
                         }
                     ),
-                    imeAction = ImeAction.Next
+                    imeAction = ImeAction.Next,
+                    error = state.errorMessage != null,
                 )
-
+                AnimatedVisibility(visible =state.errorMessage != null) {
+                    state.errorMessage?.let {
+                     Text(
+                         text = context.getString(it),
+                         color = Color.Red,
+                         style = MaterialTheme.typography.body2
+                     )
+                    }
+                }
+                Spacer(modifier = Modifier.height(5.dp))
                 TransparentTextField(
                     textFieldValue = email,
                     textLabel = "Email",
@@ -110,11 +123,20 @@ fun RegistrationScreen(
                     keyboardActions = KeyboardActions(
                         onNext = { focusManager.moveFocus(FocusDirection.Down) }
                     ),
-                    imeAction = ImeAction.Next
-                )
+                    imeAction = ImeAction.Next,
+                    error = state.errorMessage != null,
 
-
-
+                    )
+                AnimatedVisibility(visible =state.errorEmail != null) {
+                    state.errorEmail?.let {
+                        Text(
+                            text = context.getString(it),
+                            color = Color.Red,
+                            style = MaterialTheme.typography.body2
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(5.dp))
                 TransparentTextField(
                     textFieldValue = password1,
                     textLabel = "Password",
@@ -125,6 +147,7 @@ fun RegistrationScreen(
                         }
                     ),
                     imeAction = ImeAction.Next,
+                    error = state.errorMessage != null,
                     trailingIcon = {
                         IconButton(
                             onClick = {
@@ -139,6 +162,16 @@ fun RegistrationScreen(
                     },
                     visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
                 )
+                AnimatedVisibility(visible =state.errorPassword != null) {
+                    state.errorPassword?.let {
+                        Text(
+                            text = context.getString(it),
+                            color = Color.Red,
+                            style = MaterialTheme.typography.body2
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(5.dp))
 
                 TransparentTextField(
                     textFieldValue = password2,
@@ -153,7 +186,7 @@ fun RegistrationScreen(
                                 email.value,
                                 password1.value,
                                 password2.value,
-                                navController
+               //                 navController
                             )
                         }
                     ),
@@ -173,20 +206,22 @@ fun RegistrationScreen(
                     visualTransformation = if (confirmPasswordVisibility) VisualTransformation.None else PasswordVisualTransformation()
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 RoundedButton(
                     text = "Sign Up",
                     displayProgressBar = state.displayProgressBar,
                     onClick = {
+                        focusManager.clearFocus()
                         viewModel.singUp(
                             username.value,
                             email.value,
                             password1.value,
-                            password2.value,
-                            navController = navController
+                            password2.value
+        //                    navController = navController
                         )
-                    }
+                    },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
 
                 ClickableText(
@@ -253,12 +288,15 @@ fun RegistrationScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-          Text(text = "${state.response?.key}",color = MaterialTheme.colors.primary)
+          Text(text = state.error,color = MaterialTheme.colors.primary)
+
+            //Text(text = "${state.response?.us}",color = MaterialTheme.colors.primary)
+
 
         }
 
-        if(state.errorMessage != null) {
-            EventDialog(errorMessage = state.errorMessage, onDismiss = { viewModel.hideErrorDialog() })
-        }
+//        if(state.errorMessage != null) {
+//            EventDialog(errorMessage = state.errorMessage, onDismiss = { viewModel.hideErrorDialog() })
+//        }
     }
 }

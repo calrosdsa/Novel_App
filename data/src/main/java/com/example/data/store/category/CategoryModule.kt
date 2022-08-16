@@ -21,7 +21,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.map
 import javax.inject.Singleton
 
-typealias CategoryStore = Store<Unit, List<CategoryEntity>>
+typealias   CategoryStore = Store<Unit, List<CategoryEntity>>
 
 
 

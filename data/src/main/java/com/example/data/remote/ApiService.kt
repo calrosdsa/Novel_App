@@ -2,9 +2,9 @@ package com.example.data.remote
 
 import com.example.data.dto.allNovels.AllNovelsDto
 import com.example.data.dto.browse.BrowseDto
+import com.example.data.dto.chapters.*
 import com.example.data.dto.novel.NovelDetailDto
 import com.example.data.dto.novels.NovelsDto
-import com.example.data.dto.chapters.NovelChaptersDto
 import com.example.data.dto.chaptersLatest.LatestChaptersDto
 import com.example.data.dto.history.HistoryDtoItem
 import com.example.data.dto.library.BookMarkDto
@@ -16,7 +16,7 @@ import com.example.data.dto.searchNovel.ResultSearch
 import com.example.data.dto.user.LoginRequest
 import com.example.data.dto.user.LoginResponse
 import com.example.data.dto.user.SignUpRequest
-import com.example.data.local.entities.CategoryEntity
+import com.example.data.dto.user.SignUpResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -44,10 +44,10 @@ interface ApiService {
     ):Response<BrowseDto>
 
     @POST("/api/v1/users/auth/login/")
-    suspend fun loginRequest(@Body loginRequest:LoginRequest): LoginResponse
+    suspend fun loginRequest(@Body loginRequest:LoginRequest):Response<LoginResponse>
 
     @POST("/api/v1/users/auth/register/")
-    suspend fun  signUpRequest(@Body signUpRequest: SignUpRequest):LoginResponse
+    suspend fun  signUpRequest(@Body signUpRequest: SignUpRequest):Response<SignUpResponse>
     @GET("/profile/me")
     suspend fun getProfile(
         @Header("Authorization") token: String
@@ -85,8 +85,31 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("page") page:Int
         ):Call<List<HistoryDtoItem>>
+
+
+    @GET("/novels/single_chapter/{slug}/")
+    suspend fun getChapterSingle(
+//        @Header("Authorization") token: String,
+        @Path("slug") slug:String
+    ):SingleChapterDto
+
+    @GET("/novels/all_chapters/{slug}/")
+    suspend fun getAllChapters(
+        @Path("slug") slug:String,
+    ):ChaptersDto
+
+    @POST("/novels/chapters/")
+    suspend fun downloadChapters(@Body ids:Ids):List<DownLoadChapter>
+
+    @GET("/novels/chapters/{novelSlug}/")
+    suspend fun downloadAllChapters(
+        @Path("novelSlug") novelSlug:String,
+    ): List<DownLoadChapter>
 }
 
 data class NovelOption(
     val option: Int
+)
+data class Ids(
+    val ids:List<Int>
 )

@@ -15,7 +15,7 @@ public abstract class EntityDao<E extends com.example.data.local.entities.NovelE
     }
     
     @org.jetbrains.annotations.Nullable()
-    @androidx.room.Insert()
+    @androidx.room.Insert(onConflict = androidx.room.OnConflictStrategy.REPLACE)
     public abstract java.lang.Object insert(@org.jetbrains.annotations.NotNull()
     E entity, @org.jetbrains.annotations.NotNull()
     kotlin.coroutines.Continuation<? super java.lang.Long> continuation);

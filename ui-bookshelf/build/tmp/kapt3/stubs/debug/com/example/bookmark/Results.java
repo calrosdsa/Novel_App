@@ -3,6 +3,7 @@ package com.example.bookmark;
 import androidx.lifecycle.MediatorLiveData;
 import com.example.domain.util.NovelOrder;
 import com.example.data.local.entities.FollowingEntity;
+import com.example.data.resultentities.ChapterAndNovelImage;
 
 @kotlin.Metadata(mv = {1, 6, 0}, k = 1, d1 = {"\u0000\u001c\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u0000\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\b6\u0018\u0000*\u0006\b\u0000\u0010\u0001 \u00012\u00020\u0002:\u0003\u0004\u0005\u0006B\u0007\b\u0004\u00a2\u0006\u0002\u0010\u0003\u0082\u0001\u0003\u0007\b\t\u00a8\u0006\n"}, d2 = {"Lcom/example/bookmark/Results;", "R", "", "()V", "Error", "Loading", "Success", "Lcom/example/bookmark/Results$Success;", "Lcom/example/bookmark/Results$Error;", "Lcom/example/bookmark/Results$Loading;", "ui-bookshelf_debug"})
 public abstract class Results<R extends java.lang.Object> {

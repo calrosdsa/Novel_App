@@ -1,4 +1,4 @@
-package com.example.bookmark.pager
+package com.example.recommended.pager
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.DecayAnimationSpec
@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.example.recommended.pager.PagerCard
-import com.example.recommended.pager.PagerScope
+import com.example.bookmark.pager.PagerStateCards
+import com.example.bookmark.pager.rememberPagerStateCards
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import dev.chrisbanes.snapper.*

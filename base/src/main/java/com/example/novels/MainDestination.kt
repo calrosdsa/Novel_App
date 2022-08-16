@@ -10,4 +10,12 @@ object MainDestination {
    const val SEARCH_SCREEN = "search"
    const val HISTORY_SEARCH = "history_search"
    const val HISTORY_NOVEL = "history_novels"
+   const val CHAPTERS_SCREEN = "chapters_screen"
+   const val CHAPTER_SCREEN = "chapter_screen"
+   const val CHAPTER_SCREEN_DOWN = "chapter_screen_down"
+   const val CHAPTERS_DOWNLOAD = "chapters_download"
+   const val CHAPTER_DOWNLOAD_DETAIL = "chapter_download_detail"
+
 }
+//TOKEN
+// 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

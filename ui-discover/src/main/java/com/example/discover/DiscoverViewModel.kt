@@ -21,6 +21,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.example.domain.useCases.GetBrowseResults
 import com.example.domain.util.ObservableLoadingCounter
+import com.example.domain.util.collectStatus
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -117,7 +118,9 @@ class DiscoverViewModel @Inject constructor(
     }
 
     private fun getCategories(){
-        updateCategory(UpdateCategory.Params(Unit))
+        viewModelScope.launch {
+        updateCategory(UpdateCategory.Params(Unit)).collectStatus(loadingState,uiMessageManager)
+        }
     }
 
     fun clearMessage(id:Long){

@@ -9,7 +9,7 @@ import javax.annotation.processing.Generated;
 import javax.inject.Provider;
 
 @ScopeMetadata
-@QualifierMetadata("javax.inject.Named")
+@QualifierMetadata
 @DaggerGenerated
 @Generated(
     value = "dagger.internal.codegen.ComponentProcessor",
@@ -20,26 +20,22 @@ import javax.inject.Provider;
     "rawtypes"
 })
 public final class TokenInterceptor_Factory implements Factory<TokenInterceptor> {
-  private final Provider<String> tokenProvider;
-
   private final Provider<UserAuth> authProvider;
 
-  public TokenInterceptor_Factory(Provider<String> tokenProvider, Provider<UserAuth> authProvider) {
-    this.tokenProvider = tokenProvider;
+  public TokenInterceptor_Factory(Provider<UserAuth> authProvider) {
     this.authProvider = authProvider;
   }
 
   @Override
   public TokenInterceptor get() {
-    return newInstance(tokenProvider.get(), authProvider.get());
+    return newInstance(authProvider.get());
   }
 
-  public static TokenInterceptor_Factory create(Provider<String> tokenProvider,
-      Provider<UserAuth> authProvider) {
-    return new TokenInterceptor_Factory(tokenProvider, authProvider);
+  public static TokenInterceptor_Factory create(Provider<UserAuth> authProvider) {
+    return new TokenInterceptor_Factory(authProvider);
   }
 
-  public static TokenInterceptor newInstance(String token, UserAuth auth) {
-    return new TokenInterceptor(token, auth);
+  public static TokenInterceptor newInstance(UserAuth auth) {
+    return new TokenInterceptor(auth);
   }
 }

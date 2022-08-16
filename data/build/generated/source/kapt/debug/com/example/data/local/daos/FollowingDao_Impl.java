@@ -10,8 +10,8 @@ import androidx.room.SharedSQLiteStatement;
 import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
-import com.example.data.Converters;
 import com.example.data.local.entities.FollowingEntity;
+import com.example.data.util.Converters;
 import java.lang.Class;
 import java.lang.Exception;
 import java.lang.Integer;
@@ -119,7 +119,7 @@ public final class FollowingDao_Impl implements FollowingDao {
 
   @Override
   public Object insertFollowings(final List<FollowingEntity> followings,
-      final Continuation<? super Unit> continuation) {
+      final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       public Unit call() throws Exception {
@@ -132,12 +132,12 @@ public final class FollowingDao_Impl implements FollowingDao {
           __db.endTransaction();
         }
       }
-    }, continuation);
+    }, arg1);
   }
 
   @Override
   public Object insertFollowing(final FollowingEntity followings,
-      final Continuation<? super Unit> continuation) {
+      final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       public Unit call() throws Exception {
@@ -150,11 +150,11 @@ public final class FollowingDao_Impl implements FollowingDao {
           __db.endTransaction();
         }
       }
-    }, continuation);
+    }, arg1);
   }
 
   @Override
-  public Object deleteNovel(final String novelId, final Continuation<? super Unit> continuation) {
+  public Object deleteNovel(final String novelId, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       public Unit call() throws Exception {
@@ -175,11 +175,11 @@ public final class FollowingDao_Impl implements FollowingDao {
           __preparedStmtOfDeleteNovel.release(_stmt);
         }
       }
-    }, continuation);
+    }, arg1);
   }
 
   @Override
-  public Object deleteNovelById(final int id, final Continuation<? super Unit> continuation) {
+  public Object deleteNovelById(final int id, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       public Unit call() throws Exception {
@@ -196,11 +196,11 @@ public final class FollowingDao_Impl implements FollowingDao {
           __preparedStmtOfDeleteNovelById.release(_stmt);
         }
       }
-    }, continuation);
+    }, arg1);
   }
 
   @Override
-  public Object deleteAll(final Continuation<? super Unit> continuation) {
+  public Object deleteAll(final Continuation<? super Unit> arg0) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       public Unit call() throws Exception {
@@ -215,7 +215,7 @@ public final class FollowingDao_Impl implements FollowingDao {
           __preparedStmtOfDeleteAll.release(_stmt);
         }
       }
-    }, continuation);
+    }, arg0);
   }
 
   @Override

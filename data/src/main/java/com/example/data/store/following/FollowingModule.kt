@@ -59,6 +59,7 @@ internal object FollowingModule{
                 val results = entries.map { it.toFollowingEntity().copy(
                   cover = novelUtil.getImageBitmap(context,it.cover),
                 ) }
+                followingDao.deleteAll()
                 followingDao.insertFollowings(results)
               //  }
             },

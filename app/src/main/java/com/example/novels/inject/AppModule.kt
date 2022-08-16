@@ -8,6 +8,8 @@ import androidx.core.os.ConfigurationCompat
 import com.example.data.*
 import com.example.data.remote.ApiService
 import com.example.data.util.Constants
+import com.example.domain.UserAuth
+import com.example.domain.interceptors.TokenInterceptor
 import com.example.util.AppCoroutineDispatchers
 import dagger.Module
 import dagger.Provides
@@ -45,11 +47,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient = with(OkHttpClient.Builder()) {
+    fun provideOkHttpClient(
+//        auth:UserAuth
+    ): OkHttpClient = with(OkHttpClient.Builder()) {
         writeTimeout(3, TimeUnit.MINUTES)
             .connectTimeout(3, TimeUnit.MINUTES)
             .readTimeout(10L, TimeUnit.MINUTES)
-//            .addInterceptor(TokenInterceptor(token,auth))
+//            .addInterceptor(TokenInterceptor(auth))
         build()
     }
 

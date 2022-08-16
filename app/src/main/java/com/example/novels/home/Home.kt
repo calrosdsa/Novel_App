@@ -2,6 +2,8 @@ package com.example.novels.home
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.view.Window
+import android.view.WindowManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.*
@@ -42,7 +44,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun Home(context:Context) {
+fun Home(
+    context:Context,
+    window: Window
+) {
     val navController = rememberAnimatedNavController()
     val bottomTabs = listOf(Screen.Home, Screen.BookShelf, Screen.Profile)
     val discoverRoute =  Screen.Explore.route + "?status={status}&category={category}&ordering={ordering}"
@@ -55,7 +60,6 @@ fun Home(context:Context) {
     //    navController.currentBackStackEntryFlow.collect { entry ->
    //     }
  //   }
-
     val state = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
@@ -86,9 +90,9 @@ fun Home(context:Context) {
                        navController.navigate(selected.route) {
                             launchSingleTop = true
                             restoreState = true
-                            popUpTo(findStartDestination(navController.graph).id) {
-                                saveState = true
-                            }
+//                            popUpTo(findStartDestination(navController.graph).id) {
+//                                saveState = true
+//                            }
                             popUpTo(navController.graph.findStartDestination().id) {
                                 saveState = true
                             }
@@ -101,7 +105,7 @@ fun Home(context:Context) {
     ) {
         AnimatedNavHost(
             navController = navController,
-            startDestination = MainDestination.RECOMMENDED_SCREEN,
+            startDestination = MainDestination.HOME_ROUTE,
       //      modifier = Modifier.padding(innerPaddingModifier),
    //         enterTransition = { defaultTiviEnterTransition(initialState, targetState) },
    //         exitTransition = { defaultTiviExitTransition(initialState, targetState) },
@@ -111,7 +115,9 @@ fun Home(context:Context) {
             homeGraph(navController=navController,
                 context = context,
                 state = state,
-                modifier = Modifier.padding(it))
+                modifier = Modifier.padding(it),
+                window = window
+            )
         }
     }
 }

@@ -24,7 +24,7 @@ class NovelsViewModel @Inject constructor(
             getNovels()
     }
 
-    private fun getNovels(){
+    fun getNovels(){
         getNovelUseCase().onEach { result->
             when(result){
                 is Resource.Success->{
@@ -36,7 +36,6 @@ class NovelsViewModel @Inject constructor(
                 }
                 is Resource.Error->{
                     _state.value = NovelsState(error = result.message?:"An expected error ocurred")
-
                 }
             }
         }.launchIn(viewModelScope)

@@ -10,8 +10,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class TokenInterceptor @Inject constructor (
-    @Named("Token") private val token:String,
-    private val auth: UserAuth
+    auth: UserAuth
     ):Interceptor {
     private val tokenValue:String = auth.tokenValue.token
 

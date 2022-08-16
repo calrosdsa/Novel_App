@@ -34,7 +34,7 @@ fun RoundedButton(
         }
     } else {
         CircularProgressIndicator(
-            modifier = Modifier.size(50.dp),
+            modifier = modifier.size(50.dp),
             color = MaterialTheme.colors.primary,
             strokeWidth = 6.dp
         )

@@ -1,7 +1,7 @@
 package com.example.login;
 
-import com.example.data.repository.NovelRepository;
 import com.example.domain.interactors.UpdateFollowingNovels;
+import com.example.domain.useCases.LoginUseCase;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
@@ -21,28 +21,29 @@ import javax.inject.Provider;
     "rawtypes"
 })
 public final class LoginViewModel_Factory implements Factory<LoginViewModel> {
-  private final Provider<NovelRepository> repositoryProvider;
-
   private final Provider<UpdateFollowingNovels> updateFollowingNovelsProvider;
 
-  public LoginViewModel_Factory(Provider<NovelRepository> repositoryProvider,
-      Provider<UpdateFollowingNovels> updateFollowingNovelsProvider) {
-    this.repositoryProvider = repositoryProvider;
+  private final Provider<LoginUseCase> loginUseCaseProvider;
+
+  public LoginViewModel_Factory(Provider<UpdateFollowingNovels> updateFollowingNovelsProvider,
+      Provider<LoginUseCase> loginUseCaseProvider) {
     this.updateFollowingNovelsProvider = updateFollowingNovelsProvider;
+    this.loginUseCaseProvider = loginUseCaseProvider;
   }
 
   @Override
   public LoginViewModel get() {
-    return newInstance(repositoryProvider.get(), updateFollowingNovelsProvider.get());
+    return newInstance(updateFollowingNovelsProvider.get(), loginUseCaseProvider.get());
   }
 
-  public static LoginViewModel_Factory create(Provider<NovelRepository> repositoryProvider,
-      Provider<UpdateFollowingNovels> updateFollowingNovelsProvider) {
-    return new LoginViewModel_Factory(repositoryProvider, updateFollowingNovelsProvider);
+  public static LoginViewModel_Factory create(
+      Provider<UpdateFollowingNovels> updateFollowingNovelsProvider,
+      Provider<LoginUseCase> loginUseCaseProvider) {
+    return new LoginViewModel_Factory(updateFollowingNovelsProvider, loginUseCaseProvider);
   }
 
-  public static LoginViewModel newInstance(NovelRepository repository,
-      UpdateFollowingNovels updateFollowingNovels) {
-    return new LoginViewModel(repository, updateFollowingNovels);
+  public static LoginViewModel newInstance(UpdateFollowingNovels updateFollowingNovels,
+      LoginUseCase loginUseCase) {
+    return new LoginViewModel(updateFollowingNovels, loginUseCase);
   }
 }

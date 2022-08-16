@@ -19,8 +19,8 @@ class NovelDatabase_AutoMigration_1_2_Impl extends Migration {
     database.execSQL("CREATE TABLE IF NOT EXISTS `last_requests` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `request` TEXT NOT NULL, `entity_id` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL)");
     database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_last_requests_request_entity_id` ON `last_requests` (`request`, `entity_id`)");
     database.execSQL("CREATE TABLE IF NOT EXISTS `novel_history` (`id` INTEGER NOT NULL, `chapters` INTEGER NOT NULL, `last_chapter` TEXT NOT NULL, `last_chapter_slug` TEXT NOT NULL, `novel_cover` TEXT NOT NULL, `novel_slug` TEXT NOT NULL, `novel_title` TEXT NOT NULL, `progress` INTEGER NOT NULL, `rank` INTEGER NOT NULL, `viewed_on` TEXT NOT NULL, PRIMARY KEY(`id`))");
-    database.execSQL("CREATE TABLE IF NOT EXISTS `novel_images` (`id` INTEGER NOT NULL, `novel_id` INTEGER NOT NULL, `image` BLOB NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`novel_id`) REFERENCES `novel_history`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )");
-    database.execSQL("CREATE INDEX IF NOT EXISTS `index_novel_images_novel_id` ON `novel_images` (`novel_id`)");
+    database.execSQL("CREATE TABLE IF NOT EXISTS `chapter_novel` (`id` INTEGER NOT NULL, `created_at` TEXT NOT NULL, `novelId` INTEGER NOT NULL, `slug` TEXT NOT NULL, `title` TEXT NOT NULL, `chapter` TEXT NOT NULL, PRIMARY KEY(`id`))");
+    database.execSQL("CREATE TABLE IF NOT EXISTS `novel_images` (`id` INTEGER NOT NULL, `novel_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `chapterCount` INTEGER NOT NULL, `image` BLOB NOT NULL, PRIMARY KEY(`id`))");
     database.execSQL("CREATE TABLE IF NOT EXISTS `history_entries` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `novel_id` INTEGER NOT NULL, `page` INTEGER NOT NULL, `page_order` INTEGER NOT NULL)");
     database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_history_entries_novel_id` ON `history_entries` (`novel_id`)");
     database.execSQL("CREATE TABLE IF NOT EXISTS `category_table` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, PRIMARY KEY(`id`))");

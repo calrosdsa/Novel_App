@@ -8,7 +8,7 @@ import androidx.room.Update
 import com.example.data.local.entities.NovelEntity
 
 abstract class EntityDao<in E : NovelEntity> {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insert(entity: E):Long
 
     @Insert

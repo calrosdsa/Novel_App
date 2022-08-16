@@ -1,5 +1,6 @@
 package com.example.signup;
 
+import android.content.Context;
 import com.example.data.repository.NovelRepository;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
@@ -9,7 +10,7 @@ import javax.annotation.processing.Generated;
 import javax.inject.Provider;
 
 @ScopeMetadata
-@QualifierMetadata
+@QualifierMetadata("dagger.hilt.android.qualifiers.ApplicationContext")
 @DaggerGenerated
 @Generated(
     value = "dagger.internal.codegen.ComponentProcessor",
@@ -22,20 +23,25 @@ import javax.inject.Provider;
 public final class SignUpViewModel_Factory implements Factory<SignUpViewModel> {
   private final Provider<NovelRepository> repositoryProvider;
 
-  public SignUpViewModel_Factory(Provider<NovelRepository> repositoryProvider) {
+  private final Provider<Context> contextProvider;
+
+  public SignUpViewModel_Factory(Provider<NovelRepository> repositoryProvider,
+      Provider<Context> contextProvider) {
     this.repositoryProvider = repositoryProvider;
+    this.contextProvider = contextProvider;
   }
 
   @Override
   public SignUpViewModel get() {
-    return newInstance(repositoryProvider.get());
+    return newInstance(repositoryProvider.get(), contextProvider.get());
   }
 
-  public static SignUpViewModel_Factory create(Provider<NovelRepository> repositoryProvider) {
-    return new SignUpViewModel_Factory(repositoryProvider);
+  public static SignUpViewModel_Factory create(Provider<NovelRepository> repositoryProvider,
+      Provider<Context> contextProvider) {
+    return new SignUpViewModel_Factory(repositoryProvider, contextProvider);
   }
 
-  public static SignUpViewModel newInstance(NovelRepository repository) {
-    return new SignUpViewModel(repository);
+  public static SignUpViewModel newInstance(NovelRepository repository, Context context) {
+    return new SignUpViewModel(repository, context);
   }
 }

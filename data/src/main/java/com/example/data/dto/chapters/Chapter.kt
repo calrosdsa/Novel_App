@@ -9,3 +9,13 @@ data class Chapter(
     val title: String,
     val chapter: String
 )
+
+data class DownLoadChapter(
+    val created_at: String,
+    val id: Int,
+    val novelId: Int,
+//    val number: Int,
+    val slug: String,
+    val title: String,
+    val chapter: String
+)

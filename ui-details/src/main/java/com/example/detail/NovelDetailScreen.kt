@@ -34,7 +34,7 @@ fun NovelDetail(
                   viewModel.refresh()
               },
           ) {
-      Box(modifier = Modifier
+      Column(modifier = Modifier
           .fillMaxSize()
           .background(color = MaterialTheme.colors.background)) {
 
@@ -49,12 +49,10 @@ fun NovelDetail(
                       item {
                           Text(text = state.error,modifier = Modifier
                               .fillMaxSize()
-                              .align(Alignment.Center))
-
+                              .align(Alignment.CenterHorizontally))
                       }
                   }
               }
-
               if(state.novel != null) {
                   NovelDetailPage(navController=navController)
                   }

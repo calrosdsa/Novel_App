@@ -11,14 +11,17 @@ import com.example.data.dto.recommended.Recommended
 import com.example.data.dto.reviews.ReviewsDto
 import com.example.data.dto.searchNovel.ResultSearch
 import com.example.data.dto.user.LoginResponse
+import com.example.data.dto.user.SignUpResponse
+import retrofit2.Call
+import retrofit2.Response
 
 interface NovelRepository {
      suspend fun getNovels(): NovelsDto
      suspend fun getNovelBySlug(novelSlug:String): NovelDetailDto
      suspend fun getNovelsChapters(novelSlug: String):NovelChaptersDto
      suspend fun getReviewsNovel(novelSlug: String):ReviewsDto
-     suspend fun loginRequest(email:String,password:String): LoginResponse
-     suspend fun signUpRequest(username:String,email: String,password1: String,password2: String): LoginResponse
+     suspend fun loginRequest(email:String,password:String): Response<LoginResponse>
+     suspend fun signUpRequest(username:String,email: String,password1: String,password2: String): Response<SignUpResponse>
      suspend fun getProfile(
          token:String
      ):ProfileDto

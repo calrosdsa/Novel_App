@@ -1,6 +1,8 @@
 <resources>
     <string name="title_activity_main">MainActivity</string>
-    <string name="error_input_empty">Email is empty</string>
+    <string name="error_input_empty">Required field</string>
     <string name="error_not_a_valid_email">Invalid email</string>
     <string name="password_not_match">PassWord dont match</string>
+    <string name="password_is_too_short">This password is too short. It must contain at least 8 characters.</string>
+
 </resources>

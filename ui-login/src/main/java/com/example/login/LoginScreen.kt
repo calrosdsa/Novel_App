@@ -2,6 +2,7 @@ package com.example.login
 
 import android.content.Intent
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -41,6 +42,7 @@ import androidx.navigation.NavController
 import com.example.compose.components.EventDialog
 import com.example.compose.components.RoundedButton
 import com.example.compose.components.TransparentTextField
+import com.example.novels.MainDestination
 //`import com.example.signup.SignUpActivity
 import kotlinx.coroutines.launch
 
@@ -132,8 +134,18 @@ fun LoginScreen(
                                         focusManager.moveFocus(FocusDirection.Down)
                                     }
                                 ),
-                                imeAction = ImeAction.Next
+                                imeAction = ImeAction.Next,
+                                error = state.error != ""
                             )
+                            AnimatedVisibility(visible =state.error != "") {
+                                    Text(
+                                        text = state.error,
+                                        color = Color.Red,
+                                        style = MaterialTheme.typography.body2.copy(
+                                            fontWeight = FontWeight(350)
+                                        )
+                                    )
+                            }
 
                             TransparentTextField(
                                 textFieldValue = passwordValue,
@@ -143,7 +155,9 @@ fun LoginScreen(
                                     onDone = {
                                         focusManager.clearFocus()
 
-                                        viewModel.login(emailValue.value, passwordValue.value,navController = navController)
+                                        viewModel.login(emailValue.value, passwordValue.value
+                                            ,navController = navController
+                                        )
                                     }
                                 ),
                                 imeAction = ImeAction.Done,
@@ -164,18 +178,29 @@ fun LoginScreen(
                                         )
                                     }
                                 },
-                                visualTransformation = if(passwordVisibility) {
+                                error = state.error != "",
+                                        visualTransformation = if(passwordVisibility) {
                                     VisualTransformation.None
                                 } else {
                                     PasswordVisualTransformation()
                                 }
                             )
+                            AnimatedVisibility(visible =state.error != "") {
+                                Text(
+                                    text = state.error,
+                                    color = Color.Red,
+                                    style = MaterialTheme.typography.body2.copy(
+                                        fontWeight = FontWeight(350)
+                                    )
+                                )
+                            }
 
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = "Forgot Password?",
                                 style = MaterialTheme.typography.body1,
-                                textAlign = TextAlign.End
+                                textAlign = TextAlign.End,
+                                color = MaterialTheme.colors.onPrimary
                             )
                         }
 
@@ -188,7 +213,9 @@ fun LoginScreen(
                                 text = "Login",
                                 displayProgressBar = state.displayProgressBar,
                                 onClick = {
-                                    viewModel.login(emailValue.value, passwordValue.value,navController)
+                                    viewModel.login(emailValue.value, passwordValue.value
+                                       ,navController
+                                    )
     //                                navController.navigate("main/profile"){
   //                                      popUpTo("main/profile")  { inclusive = true }
 //                                    }
@@ -219,6 +246,13 @@ fun LoginScreen(
                                 }
                             }
                         }
+//        Text(
+//            text = "akamkas",
+//            color = Color.Red,
+//            style = MaterialTheme.typography.body2.copy(
+//                fontWeight = FontWeight(350)
+//            )
+//        )
                     }
                 }
 
@@ -231,6 +265,7 @@ fun LoginScreen(
                         },
                     backgroundColor = MaterialTheme.colors.primary,
                     onClick = {
+                        navController.navigate(MainDestination.SIGNUP_SCREEN)
         //                onNavigateToRegister()
            //             context.startActivity(
           //                  Intent(context, SignUpActivity::class.java)
@@ -247,11 +282,11 @@ fun LoginScreen(
             }
         }
 
-       if(state.errorMessage != null){
-            EventDialog(
-                errorMessage = state.errorMessage,
-                onDismiss = viewModel::hideErrorDialog
-            )
-        }
+//       if(state.errorMessage != null){
+//            EventDialog(
+//                errorMessage = state.errorMessage,
+//                onDismiss = viewModel::hideErrorDialog
+//            )
+//        }
     }
 }

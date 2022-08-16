@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.LoadState
 import com.example.compose.components.VerticalGrid
 import com.example.compose.ui.SearchTopBar
 import com.example.data.dto.novels.Completed
@@ -40,100 +41,100 @@ fun NovelPage(
     val novels = viewModel.state.value.novels
 
 
-    if (novels != null) {
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-        ) {
-
-            Column(
-                modifier = Modifier
+        if (novels != null) {
+            Box(
+                modifier = modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
             ) {
-
-                Spacer(modifier = Modifier.height(10.dp))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(7.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    Text(
-                        text = "New Release",
-                        color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.h6
-                    )
-                    Text(
-                        text = stringResource(R.string.see_more),
-                        color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.subtitle2,
-                        modifier = Modifier.clickable {
-                            navController.navigate(Screen.Explore.route + "?ordering=-created")
-                        }
-                    )
-
-                }
-
-                RowPopularNovels(
-                    nav = { slug -> navController.navigate(MainDestination.NOVEL_DETAIL + "/$slug") },
-                    popular = novels.posts.map { it.toNovelItem() }
-                )
-                Spacer(modifier = Modifier.height(15.dp))
 
                 Column(
                     modifier = Modifier
-                        .height(740.dp)
-                        .padding(horizontal = 10.dp)
-                        .clip(MaterialTheme.shapes.small)
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colors.primaryVariant.copy(alpha = 0.5f))
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
                 ) {
 
-                    RankingNovels(
-                       most_views = novels.popular,
-                        trends = novels.trends,
-                        rated = novels.rated,
-                        navToNovel = {slug-> navController.navigate(MainDestination.NOVEL_DETAIL + "/$slug")}
-                    )
-                }
-                Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(7.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(7.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                        Text(
+                            text = "New Release",
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.h6
+                        )
+                        Text(
+                            text = stringResource(R.string.see_more),
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.subtitle2,
+                            modifier = Modifier.clickable {
+                                navController.navigate(Screen.Explore.route + "?ordering=-created")
+                            }
+                        )
 
-                    Text(
-                        text = "Completed Stories",
-                        color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.h6
-                    )
-                    Text(
-                        text = stringResource(R.string.see_more),
-                        color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.subtitle2,
-                        modifier = Modifier.clickable {
-                            navController.navigate(Screen.Explore.route + "?status=3")
-                        }
-                    )
-                }
+                    }
 
-                RowPopularNovels(
-                    nav = { slug -> navController.navigate(MainDestination.NOVEL_DETAIL + "/$slug") },
-                    popular = novels.completed.map { it.toNovelItem() }
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                ListGridNovel(
-                    novels = novels.completed,
-                    //onNovelClick = onNovelClick
-                )
-                Spacer(modifier = Modifier.height(10.dp))
+                    RowPopularNovels(
+                        nav = { slug -> navController.navigate(MainDestination.NOVEL_DETAIL + "/$slug") },
+                        popular = novels.posts.map { it.toNovelItem() }
+                    )
+                    Spacer(modifier = Modifier.height(15.dp))
+
+                    Column(
+                        modifier = Modifier
+                            .height(740.dp)
+                            .padding(horizontal = 10.dp)
+                            .clip(MaterialTheme.shapes.small)
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colors.primaryVariant.copy(alpha = 0.5f))
+                    ) {
+
+                        RankingNovels(
+                            most_views = novels.popular,
+                            trends = novels.trends,
+                            rated = novels.rated,
+                            navToNovel = { slug -> navController.navigate(MainDestination.NOVEL_DETAIL + "/$slug") }
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(7.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        Text(
+                            text = "Completed Stories",
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.h6
+                        )
+                        Text(
+                            text = stringResource(R.string.see_more),
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.subtitle2,
+                            modifier = Modifier.clickable {
+                                navController.navigate(Screen.Explore.route + "?status=3")
+                            }
+                        )
+                    }
+
+                    RowPopularNovels(
+                        nav = { slug -> navController.navigate(MainDestination.NOVEL_DETAIL + "/$slug") },
+                        popular = novels.completed.map { it.toNovelItem() }
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    ListGridNovel(
+                        novels = novels.completed,
+                        //onNovelClick = onNovelClick
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
 
 
                     Text(
@@ -142,29 +143,44 @@ fun NovelPage(
                         style = MaterialTheme.typography.h6,
                         modifier = Modifier.padding(7.dp)
                     )
-                RowPopularNovels(
-                    nav = { slug -> navController.navigate(MainDestination.NOVEL_DETAIL + "/$slug") },
-                    popular = novels.weekly.map { it.toNovelItem() }
-                )
-                Spacer(modifier = Modifier.height(10.dp))
+                    RowPopularNovels(
+                        nav = { slug -> navController.navigate(MainDestination.NOVEL_DETAIL + "/$slug") },
+                        popular = novels.weekly.map { it.toNovelItem() }
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
 
-                Text(
-                    text = "New Release",
-                    color = MaterialTheme.colors.primary,
-                    style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(7.dp)
+                    Text(
+                        text = "New Release",
+                        color = MaterialTheme.colors.primary,
+                        style = MaterialTheme.typography.h6,
+                        modifier = Modifier.padding(7.dp)
 
-                )
-                Spacer(modifier = Modifier.height(7.dp))
-                novels.chapters.forEach{
-                LastChapters(item = it, navToNovel = {slug->navController.navigate(MainDestination.NOVEL_DETAIL + "/$slug")})
+                    )
+                    Spacer(modifier = Modifier.height(7.dp))
+                    novels.chapters.forEach {
+                        LastChapters(
+                            item = it,
+                            navToNovel = { slug -> navController.navigate(MainDestination.NOVEL_DETAIL + "/$slug") })
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
-
-                Spacer(modifier = Modifier.height(10.dp))
             }
+        }else{
+            Box(modifier = Modifier.fillMaxSize()){
+                    Row(modifier = Modifier.align(Alignment.Center)
+                        .clip(MaterialTheme.shapes.small)
+                        .background(MaterialTheme.colors.primary)
+                        .clickable { viewModel.getNovels() }
+                        .padding(10.dp)
+                    ) {
+                        Text(text = "Refresh Page")
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Icon(imageVector = Icons.Default.Refresh, contentDescription ="refresh_page_" )
+                    }
+                }
         }
     }
-}
 
 
 private val shape = RoundedCornerShape(7.dp)

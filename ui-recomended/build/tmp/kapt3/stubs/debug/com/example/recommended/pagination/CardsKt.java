@@ -3,13 +3,9 @@ package com.example.recommended.pagination;
 import android.content.res.Configuration;
 import androidx.compose.foundation.layout.*;
 import androidx.compose.runtime.*;
-import androidx.compose.ui.Alignment;
 import androidx.compose.ui.Modifier;
 import androidx.compose.ui.layout.ContentScale;
-import androidx.compose.ui.text.style.TextAlign;
-import androidx.lifecycle.ViewModel;
 import com.example.bookmark.pager.PagerStateCards;
-import com.example.recommended.RecommendedViewModel;
 import com.google.accompanist.pager.ExperimentalPagerApi;
 import com.google.accompanist.pager.PagerState;
 

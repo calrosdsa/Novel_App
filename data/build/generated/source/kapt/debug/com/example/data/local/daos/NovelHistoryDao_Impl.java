@@ -15,10 +15,10 @@ import androidx.room.util.CursorUtil;
 import androidx.room.util.DBUtil;
 import androidx.room.util.StringUtil;
 import androidx.sqlite.db.SupportSQLiteStatement;
-import com.example.data.Converters;
 import com.example.data.local.entities.HistoryNovelEntity;
 import com.example.data.local.entities.NovelImageEntity;
 import com.example.data.resultentities.HistoryDetailed;
+import com.example.data.util.Converters;
 import java.lang.Class;
 import java.lang.Exception;
 import java.lang.Integer;
@@ -45,6 +45,8 @@ public final class NovelHistoryDao_Impl extends NovelHistoryDao {
 
   private final EntityInsertionAdapter<HistoryNovelEntity> __insertionAdapterOfHistoryNovelEntity;
 
+  private final EntityInsertionAdapter<HistoryNovelEntity> __insertionAdapterOfHistoryNovelEntity_1;
+
   private final EntityDeletionOrUpdateAdapter<HistoryNovelEntity> __deletionAdapterOfHistoryNovelEntity;
 
   private final EntityDeletionOrUpdateAdapter<HistoryNovelEntity> __updateAdapterOfHistoryNovelEntity;
@@ -58,6 +60,50 @@ public final class NovelHistoryDao_Impl extends NovelHistoryDao {
   public NovelHistoryDao_Impl(RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfHistoryNovelEntity = new EntityInsertionAdapter<HistoryNovelEntity>(__db) {
+      @Override
+      public String createQuery() {
+        return "INSERT OR REPLACE INTO `novel_history` (`id`,`chapters`,`last_chapter`,`last_chapter_slug`,`novel_cover`,`novel_slug`,`novel_title`,`progress`,`rank`,`viewed_on`) VALUES (?,?,?,?,?,?,?,?,?,?)";
+      }
+
+      @Override
+      public void bind(SupportSQLiteStatement stmt, HistoryNovelEntity value) {
+        stmt.bindLong(1, value.getId());
+        stmt.bindLong(2, value.getChapters());
+        if (value.getLast_chapter() == null) {
+          stmt.bindNull(3);
+        } else {
+          stmt.bindString(3, value.getLast_chapter());
+        }
+        if (value.getLast_chapter_slug() == null) {
+          stmt.bindNull(4);
+        } else {
+          stmt.bindString(4, value.getLast_chapter_slug());
+        }
+        if (value.getNovel_cover() == null) {
+          stmt.bindNull(5);
+        } else {
+          stmt.bindString(5, value.getNovel_cover());
+        }
+        if (value.getNovel_slug() == null) {
+          stmt.bindNull(6);
+        } else {
+          stmt.bindString(6, value.getNovel_slug());
+        }
+        if (value.getNovel_title() == null) {
+          stmt.bindNull(7);
+        } else {
+          stmt.bindString(7, value.getNovel_title());
+        }
+        stmt.bindLong(8, value.getProgress());
+        stmt.bindLong(9, value.getRank());
+        if (value.getViewed_on() == null) {
+          stmt.bindNull(10);
+        } else {
+          stmt.bindString(10, value.getViewed_on());
+        }
+      }
+    };
+    this.__insertionAdapterOfHistoryNovelEntity_1 = new EntityInsertionAdapter<HistoryNovelEntity>(__db) {
       @Override
       public String createQuery() {
         return "INSERT OR ABORT INTO `novel_history` (`id`,`chapters`,`last_chapter`,`last_chapter_slug`,`novel_cover`,`novel_slug`,`novel_title`,`progress`,`rank`,`viewed_on`) VALUES (?,?,?,?,?,?,?,?,?,?)";
@@ -198,7 +244,7 @@ public final class NovelHistoryDao_Impl extends NovelHistoryDao {
       public Unit call() throws Exception {
         __db.beginTransaction();
         try {
-          __insertionAdapterOfHistoryNovelEntity.insert(entity);
+          __insertionAdapterOfHistoryNovelEntity_1.insert(entity);
           __db.setTransactionSuccessful();
           return Unit.INSTANCE;
         } finally {
@@ -216,7 +262,7 @@ public final class NovelHistoryDao_Impl extends NovelHistoryDao {
       public Unit call() throws Exception {
         __db.beginTransaction();
         try {
-          __insertionAdapterOfHistoryNovelEntity.insert(entities);
+          __insertionAdapterOfHistoryNovelEntity_1.insert(entities);
           __db.setTransactionSuccessful();
           return Unit.INSTANCE;
         } finally {
@@ -738,7 +784,7 @@ public final class NovelHistoryDao_Impl extends NovelHistoryDao {
       return;
     }
     StringBuilder _stringBuilder = StringUtil.newStringBuilder();
-    _stringBuilder.append("SELECT `id`,`novel_id`,`image` FROM `novel_images` WHERE `novel_id` IN (");
+    _stringBuilder.append("SELECT `id`,`novel_id`,`title`,`chapterCount`,`image` FROM `novel_images` WHERE `novel_id` IN (");
     final int _inputSize = _map.size();
     StringUtil.appendPlaceholders(_stringBuilder, _inputSize);
     _stringBuilder.append(")");
@@ -759,7 +805,9 @@ public final class NovelHistoryDao_Impl extends NovelHistoryDao {
       }
       final int _cursorIndexOfId = 0;
       final int _cursorIndexOfNovelId = 1;
-      final int _cursorIndexOfImage = 2;
+      final int _cursorIndexOfTitle = 2;
+      final int _cursorIndexOfChapterCount = 3;
+      final int _cursorIndexOfImage = 4;
       while(_cursor.moveToNext()) {
         final long _tmpKey = _cursor.getLong(_itemKeyIndex);
         ArrayList<NovelImageEntity> _tmpRelation = _map.get(_tmpKey);
@@ -769,6 +817,14 @@ public final class NovelHistoryDao_Impl extends NovelHistoryDao {
           _tmpId = _cursor.getLong(_cursorIndexOfId);
           final long _tmpNovelId;
           _tmpNovelId = _cursor.getLong(_cursorIndexOfNovelId);
+          final String _tmpTitle;
+          if (_cursor.isNull(_cursorIndexOfTitle)) {
+            _tmpTitle = null;
+          } else {
+            _tmpTitle = _cursor.getString(_cursorIndexOfTitle);
+          }
+          final int _tmpChapterCount;
+          _tmpChapterCount = _cursor.getInt(_cursorIndexOfChapterCount);
           final Bitmap _tmpImage;
           final byte[] _tmp;
           if (_cursor.isNull(_cursorIndexOfImage)) {
@@ -777,7 +833,7 @@ public final class NovelHistoryDao_Impl extends NovelHistoryDao {
             _tmp = _cursor.getBlob(_cursorIndexOfImage);
           }
           _tmpImage = __converters.toBitmap(_tmp);
-          _item_1 = new NovelImageEntity(_tmpId,_tmpNovelId,_tmpImage);
+          _item_1 = new NovelImageEntity(_tmpId,_tmpNovelId,_tmpTitle,_tmpChapterCount,_tmpImage);
           _tmpRelation.add(_item_1);
         }
       }

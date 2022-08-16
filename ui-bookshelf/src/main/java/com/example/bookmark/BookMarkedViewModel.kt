@@ -3,6 +3,7 @@ package com.example.bookmark
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.util.Log
 import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,7 +28,6 @@ import javax.inject.Inject
 @HiltViewModel
 class
 BookMarkedViewModel @Inject constructor(
-    private val novelRepository:NovelRepository,
     private val observerFollowings: ObserverFollowings,
     private val updateFollowingNovels: UpdateFollowingNovels,
     private  val updatedOptionsBookMark: UpdatedOptionsBookMark,
@@ -69,12 +69,7 @@ BookMarkedViewModel @Inject constructor(
     )
 
     init {
-        if(userAuth.refresh == StateRefresh.REFRESH){
-        getFollowings(true)
-            userAuth.refresh = StateRefresh.INITIAL
-        }else{
-            getFollowings()
-        }
+        //updateLibrary()
         observerFollowings(ObserverFollowings.Params(0,
             ordering.value?:NovelOrder.Updated,))
         viewModelScope.launch {
@@ -86,6 +81,20 @@ BookMarkedViewModel @Inject constructor(
         viewModelScope.launch {
             currentItem.collect { updateDataSource() }
         }
+    }
+    fun updateLibrary(){
+        Log.d("ONSTARTLIBRARY","SCSCASC")
+        if(userAuth.refresh == StateRefresh.REFRESH){
+            getFollowings(true)
+            userAuth.refresh = StateRefresh.INITIAL
+        }else{
+            getFollowings()
+        }
+    }
+
+    fun onDispose(){
+        Log.d("ONDISPOSE","DIS")
+
     }
 
 

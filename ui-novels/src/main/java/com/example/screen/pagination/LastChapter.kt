@@ -23,19 +23,16 @@ internal fun LastChapters(
     item: Chapter,
     navToNovel:(String)->Unit,
 ){
-
     Row(modifier = Modifier.fillMaxWidth()
         .padding(top = 5.dp, bottom = 5.dp)
-        .padding(10.dp)
+//        .padding(10.dp)
         .height(60.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         Box(
             Modifier
                 .fillMaxWidth(0.18f)
         ) {
-
             Image(
                 painter = rememberAsyncImagePainter(model =  item.novel_cover),
                 contentDescription = "Cover BookMark",

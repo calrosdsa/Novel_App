@@ -19,6 +19,8 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper.Callback;
 import androidx.sqlite.db.SupportSQLiteOpenHelper.Configuration;
 import com.example.data.local.daos.CategoryDao;
 import com.example.data.local.daos.CategoryDao_Impl;
+import com.example.data.local.daos.ChapterDao;
+import com.example.data.local.daos.ChapterDao_Impl;
 import com.example.data.local.daos.FollowingDao;
 import com.example.data.local.daos.FollowingDao_Impl;
 import com.example.data.local.daos.HistoryDao;
@@ -60,6 +62,8 @@ public final class NovelDatabase_Impl extends NovelDatabase {
 
   private volatile NovelImageDao _novelImageDao;
 
+  private volatile ChapterDao _chapterDao;
+
   @Override
   protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration configuration) {
     final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(configuration, new RoomOpenHelper.Delegate(2) {
@@ -73,10 +77,10 @@ public final class NovelDatabase_Impl extends NovelDatabase {
         _db.execSQL("CREATE TABLE IF NOT EXISTS `history_entries` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `novel_id` INTEGER NOT NULL, `page` INTEGER NOT NULL, `page_order` INTEGER NOT NULL)");
         _db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_history_entries_novel_id` ON `history_entries` (`novel_id`)");
         _db.execSQL("CREATE TABLE IF NOT EXISTS `novel_history` (`id` INTEGER NOT NULL, `chapters` INTEGER NOT NULL, `last_chapter` TEXT NOT NULL, `last_chapter_slug` TEXT NOT NULL, `novel_cover` TEXT NOT NULL, `novel_slug` TEXT NOT NULL, `novel_title` TEXT NOT NULL, `progress` INTEGER NOT NULL, `rank` INTEGER NOT NULL, `viewed_on` TEXT NOT NULL, PRIMARY KEY(`id`))");
-        _db.execSQL("CREATE TABLE IF NOT EXISTS `novel_images` (`id` INTEGER NOT NULL, `novel_id` INTEGER NOT NULL, `image` BLOB NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`novel_id`) REFERENCES `novel_history`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )");
-        _db.execSQL("CREATE INDEX IF NOT EXISTS `index_novel_images_novel_id` ON `novel_images` (`novel_id`)");
+        _db.execSQL("CREATE TABLE IF NOT EXISTS `novel_images` (`id` INTEGER NOT NULL, `novel_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `chapterCount` INTEGER NOT NULL, `image` BLOB NOT NULL, PRIMARY KEY(`id`))");
+        _db.execSQL("CREATE TABLE IF NOT EXISTS `chapter_novel` (`id` INTEGER NOT NULL, `created_at` TEXT NOT NULL, `novelId` INTEGER NOT NULL, `slug` TEXT NOT NULL, `title` TEXT NOT NULL, `chapter` TEXT NOT NULL, PRIMARY KEY(`id`))");
         _db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fc9860a375e04a10928f74ba1929d49a')");
+        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a5fd9394880b263633f52dee6907e4d2')");
       }
 
       @Override
@@ -88,6 +92,7 @@ public final class NovelDatabase_Impl extends NovelDatabase {
         _db.execSQL("DROP TABLE IF EXISTS `history_entries`");
         _db.execSQL("DROP TABLE IF EXISTS `novel_history`");
         _db.execSQL("DROP TABLE IF EXISTS `novel_images`");
+        _db.execSQL("DROP TABLE IF EXISTS `chapter_novel`");
         if (mCallbacks != null) {
           for (int _i = 0, _size = mCallbacks.size(); _i < _size; _i++) {
             mCallbacks.get(_i).onDestructiveMigration(_db);
@@ -107,7 +112,6 @@ public final class NovelDatabase_Impl extends NovelDatabase {
       @Override
       public void onOpen(SupportSQLiteDatabase _db) {
         mDatabase = _db;
-        _db.execSQL("PRAGMA foreign_keys = ON");
         internalInitInvalidationTracker(_db);
         if (mCallbacks != null) {
           for (int _i = 0, _size = mCallbacks.size(); _i < _size; _i++) {
@@ -224,14 +228,14 @@ public final class NovelDatabase_Impl extends NovelDatabase {
                   + " Expected:\n" + _infoNovelHistory + "\n"
                   + " Found:\n" + _existingNovelHistory);
         }
-        final HashMap<String, TableInfo.Column> _columnsNovelImages = new HashMap<String, TableInfo.Column>(3);
+        final HashMap<String, TableInfo.Column> _columnsNovelImages = new HashMap<String, TableInfo.Column>(5);
         _columnsNovelImages.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsNovelImages.put("novel_id", new TableInfo.Column("novel_id", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsNovelImages.put("title", new TableInfo.Column("title", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsNovelImages.put("chapterCount", new TableInfo.Column("chapterCount", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsNovelImages.put("image", new TableInfo.Column("image", "BLOB", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        final HashSet<TableInfo.ForeignKey> _foreignKeysNovelImages = new HashSet<TableInfo.ForeignKey>(1);
-        _foreignKeysNovelImages.add(new TableInfo.ForeignKey("novel_history", "CASCADE", "CASCADE",Arrays.asList("novel_id"), Arrays.asList("id")));
-        final HashSet<TableInfo.Index> _indicesNovelImages = new HashSet<TableInfo.Index>(1);
-        _indicesNovelImages.add(new TableInfo.Index("index_novel_images_novel_id", false, Arrays.asList("novel_id"), Arrays.asList("ASC")));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysNovelImages = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesNovelImages = new HashSet<TableInfo.Index>(0);
         final TableInfo _infoNovelImages = new TableInfo("novel_images", _columnsNovelImages, _foreignKeysNovelImages, _indicesNovelImages);
         final TableInfo _existingNovelImages = TableInfo.read(_db, "novel_images");
         if (! _infoNovelImages.equals(_existingNovelImages)) {
@@ -239,9 +243,25 @@ public final class NovelDatabase_Impl extends NovelDatabase {
                   + " Expected:\n" + _infoNovelImages + "\n"
                   + " Found:\n" + _existingNovelImages);
         }
+        final HashMap<String, TableInfo.Column> _columnsChapterNovel = new HashMap<String, TableInfo.Column>(6);
+        _columnsChapterNovel.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsChapterNovel.put("created_at", new TableInfo.Column("created_at", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsChapterNovel.put("novelId", new TableInfo.Column("novelId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsChapterNovel.put("slug", new TableInfo.Column("slug", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsChapterNovel.put("title", new TableInfo.Column("title", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsChapterNovel.put("chapter", new TableInfo.Column("chapter", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysChapterNovel = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesChapterNovel = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoChapterNovel = new TableInfo("chapter_novel", _columnsChapterNovel, _foreignKeysChapterNovel, _indicesChapterNovel);
+        final TableInfo _existingChapterNovel = TableInfo.read(_db, "chapter_novel");
+        if (! _infoChapterNovel.equals(_existingChapterNovel)) {
+          return new RoomOpenHelper.ValidationResult(false, "chapter_novel(com.example.data.local.entities.ChapterEntity).\n"
+                  + " Expected:\n" + _infoChapterNovel + "\n"
+                  + " Found:\n" + _existingChapterNovel);
+        }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "fc9860a375e04a10928f74ba1929d49a", "5de7a3e6a7989428c51202b60b81fb35");
+    }, "a5fd9394880b263633f52dee6907e4d2", "081dd9be1308d36794e7461ec95b8bca");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(configuration.context)
         .name(configuration.name)
         .callback(_openCallback)
@@ -254,22 +274,15 @@ public final class NovelDatabase_Impl extends NovelDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "history_search","following_novels","category_table","last_requests","history_entries","novel_history","novel_images");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "history_search","following_novels","category_table","last_requests","history_entries","novel_history","novel_images","chapter_novel");
   }
 
   @Override
   public void clearAllTables() {
     super.assertNotMainThread();
     final SupportSQLiteDatabase _db = super.getOpenHelper().getWritableDatabase();
-    boolean _supportsDeferForeignKeys = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP;
     try {
-      if (!_supportsDeferForeignKeys) {
-        _db.execSQL("PRAGMA foreign_keys = FALSE");
-      }
       super.beginTransaction();
-      if (_supportsDeferForeignKeys) {
-        _db.execSQL("PRAGMA defer_foreign_keys = TRUE");
-      }
       _db.execSQL("DELETE FROM `history_search`");
       _db.execSQL("DELETE FROM `following_novels`");
       _db.execSQL("DELETE FROM `category_table`");
@@ -277,12 +290,10 @@ public final class NovelDatabase_Impl extends NovelDatabase {
       _db.execSQL("DELETE FROM `history_entries`");
       _db.execSQL("DELETE FROM `novel_history`");
       _db.execSQL("DELETE FROM `novel_images`");
+      _db.execSQL("DELETE FROM `chapter_novel`");
       super.setTransactionSuccessful();
     } finally {
       super.endTransaction();
-      if (!_supportsDeferForeignKeys) {
-        _db.execSQL("PRAGMA foreign_keys = TRUE");
-      }
       _db.query("PRAGMA wal_checkpoint(FULL)").close();
       if (!_db.inTransaction()) {
         _db.execSQL("VACUUM");
@@ -300,6 +311,7 @@ public final class NovelDatabase_Impl extends NovelDatabase {
     _typeConvertersMap.put(HistoryNovelDao.class, HistoryNovelDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(NovelHistoryDao.class, NovelHistoryDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(NovelImageDao.class, NovelImageDao_Impl.getRequiredConverters());
+    _typeConvertersMap.put(ChapterDao.class, ChapterDao_Impl.getRequiredConverters());
     return _typeConvertersMap;
   }
 
@@ -409,6 +421,20 @@ public final class NovelDatabase_Impl extends NovelDatabase {
           _novelImageDao = new NovelImageDao_Impl(this);
         }
         return _novelImageDao;
+      }
+    }
+  }
+
+  @Override
+  public ChapterDao chapterNovelDao() {
+    if (_chapterDao != null) {
+      return _chapterDao;
+    } else {
+      synchronized(this) {
+        if(_chapterDao == null) {
+          _chapterDao = new ChapterDao_Impl(this);
+        }
+        return _chapterDao;
       }
     }
   }

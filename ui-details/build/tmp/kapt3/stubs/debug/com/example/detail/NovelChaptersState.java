@@ -1,5 +1,8 @@
 package com.example.detail;
 
+import androidx.annotation.StringRes;
+import androidx.compose.material.icons.Icons;
+import androidx.compose.ui.graphics.vector.ImageVector;
 import com.example.data.dto.novel.NovelDetailDto;
 import com.example.data.dto.chapters.NovelChaptersDto;
 import com.example.data.dto.reviews.ReviewsDto;

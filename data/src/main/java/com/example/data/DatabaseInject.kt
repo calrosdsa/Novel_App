@@ -46,6 +46,8 @@ object DatabaseDaoModule {
     fun provideNovelHistoryDao(db:NovelDatabase) = db.novelHistoryDao()
     @Provides
     fun provideNovelImageDao(db:NovelDatabase) = db.novelImageDao()
+    @Provides
+    fun provideChapterNovelDao(db:NovelDatabase) = db.chapterNovelDao()
 }
 
 
