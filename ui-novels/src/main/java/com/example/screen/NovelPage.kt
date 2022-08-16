@@ -166,20 +166,21 @@ fun NovelPage(
                     Spacer(modifier = Modifier.height(10.dp))
                 }
             }
-        }else{
-            Box(modifier = Modifier.fillMaxSize()){
-                    Row(modifier = Modifier.align(Alignment.Center)
-                        .clip(MaterialTheme.shapes.small)
-                        .background(MaterialTheme.colors.primary)
-                        .clickable { viewModel.getNovels() }
-                        .padding(10.dp)
-                    ) {
-                        Text(text = "Refresh Page")
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Icon(imageVector = Icons.Default.Refresh, contentDescription ="refresh_page_" )
-                    }
-                }
         }
+//        else{
+//            Box(modifier = Modifier.fillMaxSize()){
+//                    Row(modifier = Modifier.align(Alignment.Center)
+//                        .clip(MaterialTheme.shapes.small)
+//                        .background(MaterialTheme.colors.primary)
+//                        .clickable { viewModel.getNovels() }
+//                        .padding(10.dp)
+//                    ) {
+//                        Text(text = "Refresh Page")
+//                        Spacer(modifier = Modifier.width(10.dp))
+//                        Icon(imageVector = Icons.Default.Refresh, contentDescription ="refresh_page_" )
+//                    }
+//                }
+//        }
     }
 
 
